@@ -12,17 +12,38 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EmokitApp"
         tools:targetApi="31">
+
+        <!-- SplashActivity como LAUNCHER (actividad principal) -->
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.SplashActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.EmokitApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- WelcomeActivity - Segunda en el flujo -->
+        <activity
+            android:name=".activities.WelcomeActivity"
+            android:exported="false" />
+
+        <!-- LoginActivity - Ya no es LAUNCHER -->
+        <activity
+            android:name=".activities.LoginActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.EmokitApp" />
+
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
