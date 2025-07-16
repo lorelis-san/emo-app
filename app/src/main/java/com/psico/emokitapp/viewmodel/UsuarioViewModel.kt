@@ -20,6 +20,7 @@ class UsuarioViewModel(application: Application) : AndroidViewModel(application)
             "emokit_db"
         ).build()
         repository = UsuarioRepository(db.usuarioDao())
+
     }
 
     fun insertar(usuario: Usuario) {
@@ -35,4 +36,12 @@ class UsuarioViewModel(application: Application) : AndroidViewModel(application)
             onResult(correcto)
         }
     }
+
+
+    suspend fun obtenerUsuarioPorCorreo(correo: String): Usuario? {
+        return repository.obtenerPorCorreo(correo)
+    }
+
+
+
 }

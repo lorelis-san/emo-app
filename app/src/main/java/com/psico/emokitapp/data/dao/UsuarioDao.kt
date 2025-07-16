@@ -17,4 +17,8 @@ interface UsuarioDao {
 
     @Delete
     suspend fun eliminar(usuario: Usuario)
+
+    @Query("SELECT * FROM usuarios WHERE correo = :correo LIMIT 1")
+    fun obtenerUsuarioPorCorreo(correo: String): Usuario
+
 }

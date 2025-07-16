@@ -14,9 +14,26 @@
         android:theme="@style/Theme.EmokitApp"
         tools:targetApi="31">
         <activity
-            android:name=".activities.HomeActivity"
+            android:name=".activities.MenuActivity"
             android:exported="false" />
-        <!-- SplashActivity como LAUNCHER (actividad principal) -->
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ProgresoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.MeditacionesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.RetosDiariosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.DiarioEmocionalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.HomeActivity"
+            android:exported="false" /> <!-- SplashActivity como LAUNCHER (actividad principal) -->
         <activity
             android:name=".activities.SplashActivity"
             android:exported="true"

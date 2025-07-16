@@ -23,6 +23,7 @@ class LoginActivity : AppCompatActivity() {
         val etPassword = findViewById<TextInputEditText>(R.id.etLoginPassword)
         val btnLogin = findViewById<Button>(R.id.btnLoginUser)
 
+
         btnLogin.setOnClickListener {
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
@@ -38,12 +39,17 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this, "Login correcto", Toast.LENGTH_SHORT).show()
                         // Descomenta cuando tengas HomeActivity
                          startActivity(Intent(this, HomeActivity::class.java))
+
+                        val sharedPref = getSharedPreferences("EmokitPreferences", MODE_PRIVATE)
+                        sharedPref.edit().putString("user_email", email).apply()
                         // finish()
                     } else {
                         Toast.makeText(this, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
+
+
         }
 
         val tvRegister = findViewById<TextView>(R.id.tvRegister)
@@ -51,7 +57,6 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
-
 
 
 
