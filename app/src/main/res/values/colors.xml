@@ -17,4 +17,7 @@
     <color name="emokit_button_orange">#F28C57</color>
     <color name="emokit_text_primary">#2C1340</color>
 
+    <color name="text_primary_diary">#2D3748</color>
+    <color name="text_secondary">#718096</color>
+
 </resources>
