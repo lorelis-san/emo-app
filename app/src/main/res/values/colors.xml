@@ -12,4 +12,9 @@
     <color name="accent">#03DAC5</color>
     <color name="background">#FFFFFF</color>
     <color name="text_primary">#000000</color>
+    <color name="emokit_background_start">#FFE0D3</color>
+    <color name="emokit_background_end">#F9C0A7</color>
+    <color name="emokit_button_orange">#F28C57</color>
+    <color name="emokit_text_primary">#2C1340</color>
+
 </resources>

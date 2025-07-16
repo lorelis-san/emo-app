@@ -16,7 +16,7 @@ class SplashActivity : AppCompatActivity() {
         Toast.makeText(this, "Entró al splash", Toast.LENGTH_SHORT).show()
 
         Handler().postDelayed({
-            startActivity(Intent(this, WelcomeActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }, 2000)
     }

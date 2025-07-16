@@ -1,36 +1,43 @@
 package com.psico.emokitapp.activities
 
-
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.psico.emokitapp.R
 import android.os.Bundle
-import android.widget.Toast
-import com.google.android.material.textfield.TextInputEditText
 import android.widget.Button
-import android.widget.EditText
+import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputEditText
+import com.psico.emokitapp.R
+import com.psico.emokitapp.data.entities.Usuario
+import com.psico.emokitapp.viewmodel.UsuarioViewModel
 
 class RegisterActivity : AppCompatActivity() {
+
+    private val usuarioViewModel: UsuarioViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        val etEmail = findViewById<EditText>(R.id.etEmail)
-        val etPassword = findViewById<EditText>(R.id.etPassword)
+        val etNombre = findViewById<TextInputEditText>(R.id.etRegisterNombre)
+        val etEmail = findViewById<TextInputEditText>(R.id.etRegisterEmail)
+        val etPassword = findViewById<TextInputEditText>(R.id.etRegisterPassword)
         val btnRegister = findViewById<Button>(R.id.btnRegisterUser)
 
         btnRegister.setOnClickListener {
-            val email = etEmail.text.toString()
-            val password = etPassword.text.toString()
+            val nombre = etNombre.text.toString().trim()
+            val email = etEmail.text.toString().trim()
+            val password = etPassword.text.toString().trim()
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                Toast.makeText(this, "Registrado (simulado)", Toast.LENGTH_SHORT).show()
-                finish() // regresa al login
-            } else {
+            if (nombre.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            val usuario = Usuario(nombre = nombre, correo = email, contrasena = password)
+            usuarioViewModel.insertar(usuario)
+
+            Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show()
+            finish() // Volver al login automáticamente
         }
     }
 }
