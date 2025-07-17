@@ -166,13 +166,12 @@
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
-    <!-- Frase motivacional -->
     <TextView
         android:id="@+id/tvMotivacional"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:text="“Haz de hoy tu día.”"
+        android:text="Haz de hoy tu día."
         android:textSize="20sp"
         android:textColor="#4B0082"
         app:layout_constraintTop_toBottomOf="@id/linearLayoutCards"
@@ -180,30 +179,60 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
-    <!-- Indicador de estado emocional actual -->
-    <ImageView
-        android:id="@+id/imgEstadoEmocional"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/ic_emotion_happy"
+    <LinearLayout
+        android:id="@+id/layoutEstadoEmocional"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/tvMotivacional"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp">
 
-    <TextView
-        android:id="@+id/tvEstadoEmocional"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Estado emocional actual"
-        android:textSize="18sp"
-        android:textColor="#4B0082"
-        app:layout_constraintTop_toBottomOf="@id/imgEstadoEmocional"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        <!-- Contenedor del gráfico circular -->
+        <FrameLayout
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_marginBottom="8dp">
 
-    <!-- Bottom Navigation (Home, +, Perfil) -->
+            <!-- Gráfico circular personalizado -->
+            <com.psico.emokitapp.views.EmotionalStateChart
+                android:id="@+id/chartEstadoEmocional"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!-- Emoji central -->
+            <ImageView
+                android:id="@+id/imgEmocionPrincipal"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_emotion_happy" />
+        </FrameLayout>
+
+        <!-- Texto descriptivo -->
+        <TextView
+            android:id="@+id/tvDescripcionEstado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Estado emocional de hoy"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#4B0082" />
+
+        <!-- Porcentaje de la emoción principal -->
+        <TextView
+            android:id="@+id/tvPorcentajeEmocional"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0%"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:layout_marginTop="4dp" />
+
+    </LinearLayout>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
@@ -216,7 +245,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+

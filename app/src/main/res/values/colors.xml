@@ -18,10 +18,8 @@
     <color name="emokit_text_primary">#2C1340</color>
 
     <!-- Colores principales de EMOKIT -->
-
     <color name="primary_orange">#FF6B35</color>
     <color name="background_gradient">#FFF0E6</color>
-
 
     <!-- Colores grises -->
     <color name="gray_light">#E5E5E5</color>
@@ -39,4 +37,8 @@
     <color name="emotion_anxious">#9B59B6</color>
     <color name="emotion_relaxed">#2ECC71</color>
     <color name="emotion_confused">#95A5A6</color>
+
+    <!-- Colores del diario -->
+    <color name="text_primary_diary">#2D3748</color>
+    <color name="text_secondary">#718096</color>
 </resources>
