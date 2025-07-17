@@ -17,4 +17,26 @@
     <color name="emokit_button_orange">#F28C57</color>
     <color name="emokit_text_primary">#2C1340</color>
 
+    <!-- Colores principales de EMOKIT -->
+
+    <color name="primary_orange">#FF6B35</color>
+    <color name="background_gradient">#FFF0E6</color>
+
+
+    <!-- Colores grises -->
+    <color name="gray_light">#E5E5E5</color>
+    <color name="gray_dark">#666666</color>
+
+    <!-- Colores de estado -->
+    <color name="success_green">#4CAF50</color>
+    <color name="success_light">#E8F5E8</color>
+    <color name="success_dark">#2E7D32</color>
+
+    <!-- Colores de emociones -->
+    <color name="emotion_happy">#FFD700</color>
+    <color name="emotion_sad">#4A90E2</color>
+    <color name="emotion_angry">#E74C3C</color>
+    <color name="emotion_anxious">#9B59B6</color>
+    <color name="emotion_relaxed">#2ECC71</color>
+    <color name="emotion_confused">#95A5A6</color>
 </resources>
