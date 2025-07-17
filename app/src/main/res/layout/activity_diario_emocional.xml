@@ -20,12 +20,15 @@
 
             <ImageView
                 android:id="@+id/btnBack"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/ic_arrow_back"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:focusable="true"/>
+                android:focusable="true"
+                android:contentDescription="Regresar"
+                android:padding="12dp"
+                android:scaleType="fitCenter"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -80,10 +83,11 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
                 android:src="@drawable/ic_happy"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                android:contentDescription="Seleccionar emoción feliz" />
 
             <ImageView
                 android:id="@+id/btnTriste"
@@ -92,11 +96,11 @@
                 android:layout_weight="1"
                 android:layout_marginHorizontal="4dp"
                 android:src="@drawable/ic_sad"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
                 android:scaleType="fitCenter"
-                />
+                android:contentDescription="Seleccionar emoción triste" />
 
             <ImageView
                 android:id="@+id/btnEnojado"
@@ -105,11 +109,11 @@
                 android:layout_weight="1"
                 android:layout_marginHorizontal="4dp"
                 android:src="@drawable/ic_angry"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
                 android:scaleType="fitCenter"
-                />
+                android:contentDescription="Seleccionar emoción enojado" />
 
             <ImageView
                 android:id="@+id/btnSorprendido"
@@ -118,10 +122,11 @@
                 android:layout_weight="1"
                 android:layout_marginHorizontal="4dp"
                 android:src="@drawable/ic_surprised"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                android:contentDescription="Seleccionar emoción sorprendido" />
 
             <ImageView
                 android:id="@+id/btnAnsioso"
@@ -130,10 +135,11 @@
                 android:layout_weight="1"
                 android:layout_marginHorizontal="4dp"
                 android:src="@drawable/ic_sadx2"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                android:contentDescription="Seleccionar emoción ansioso" />
 
             <ImageView
                 android:id="@+id/btnNeutral"
@@ -142,10 +148,11 @@
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:src="@drawable/ic_serious"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                android:contentDescription="Seleccionar emoción neutral" />
 
         </LinearLayout>
 
@@ -157,7 +164,7 @@
             android:gravity="top"
             android:layout_marginBottom="32dp">
 
-            <!-- Lado izquierdo: Descripción -->
+            <!-- Lado izquierdo: Descripción y Botón -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -176,7 +183,22 @@
                     android:textColor="#2D3748"
                     android:gravity="top"
                     android:inputType="textMultiLine"
-                    android:maxLines="8" />
+                    android:maxLines="8"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Botón Guardar -->
+                <Button
+                    android:id="@+id/btnGuardar"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="200dp"
+                    android:layout_height="56dp"
+                    android:backgroundTint="#FF6B35"
+                    android:text="Guardar"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_horizontal" />
+
             </LinearLayout>
 
             <!-- Lado derecho: Ilustración -->
@@ -186,22 +208,10 @@
                 android:layout_height="255dp"
                 android:src="@drawable/girl_emotion"
                 android:scaleType="centerCrop"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:contentDescription="Ilustración de emociones" />
 
         </LinearLayout>
-
-        <!-- Botón Guardar -->
-        <Button
-            android:id="@+id/btnGuardar"
-            style="@style/Widget.Material3.Button"
-            android:layout_width="207dp"
-            android:layout_height="56dp"
-            android:backgroundTint="#FF6B35"
-            android:text="Guardar"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="24dp" />
 
         <!-- Reflexiones anteriores (simple) -->
         <LinearLayout

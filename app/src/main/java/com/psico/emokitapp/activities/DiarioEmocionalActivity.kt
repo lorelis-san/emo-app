@@ -19,6 +19,10 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 
 class DiarioEmocionalActivity : AppCompatActivity() {
 
@@ -64,7 +68,6 @@ class DiarioEmocionalActivity : AppCompatActivity() {
         layoutReflexiones = findViewById(R.id.layoutReflexiones)
         etDescripcion = findViewById(R.id.etDescripcion)
 
-        // Cachear botones
         emotionButtons = listOf(
             findViewById(R.id.btnFeliz),
             findViewById(R.id.btnTriste),
@@ -80,6 +83,9 @@ class DiarioEmocionalActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvFecha).text = "${dateFormat.format(ahora)} - ${timeFormat.format(ahora)}"
 
         setupEmotionButtons()
+        emotionButtons.forEach { button ->
+            button.alpha = 0.7f
+        }
         limpiarCampos()
         lifecycleScope.launch {
             mostrarEntradasDelDia()
@@ -90,6 +96,9 @@ class DiarioEmocionalActivity : AppCompatActivity() {
     private fun setupListeners() {
         findViewById<Button>(R.id.btnGuardar).setOnClickListener {
             validarYGuardar()
+        }
+        findViewById<ImageView>(R.id.btnBack).setOnClickListener {
+            finish()
         }
     }
 
@@ -117,22 +126,40 @@ class DiarioEmocionalActivity : AppCompatActivity() {
 
     private fun seleccionarEmocion(emocion: String, imageView: ImageView) {
         emocionSeleccionada = emocion
-        resetButtonColors()
-        imageView.setBackgroundColor(getColor(R.color.emokit_button_orange))
-    }
+        resetButtonEffects()
 
-    private fun resetButtonColors() {
-        emotionButtons.forEach {
-            it.setBackgroundColor(getColor(R.color.white))
+        imageView.animate()
+            .scaleX(1.15f)
+            .scaleY(1.15f)
+            .alpha(1.0f)
+            .translationY(-4f)
+            .setDuration(250)
+            .start()
+        imageView.elevation = 8f
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
         }
     }
 
+    private fun resetButtonEffects() {
+        emotionButtons.forEach { button ->
+            button.animate()
+                .scaleX(1.0f)
+                .scaleY(1.0f)
+                .alpha(0.7f)
+                .translationY(0f)
+                .setDuration(250)
+                .start()
+            button.elevation = 0f
+        }
+    }
     private fun limpiarCampos() {
         emocionSeleccionada = ""
         etDescripcion.setText("")
-        resetButtonColors()
+        resetButtonEffects()
     }
-
     private fun cargarReflexionesAnteriores() {
         lifecycleScope.launch {
             val reflexiones = database.diarioEmocionalDao().getUltimasReflexiones(5)
@@ -145,14 +172,12 @@ class DiarioEmocionalActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun mostrarReflexiones(reflexiones: List<DiarioEmocional>) {
         containerReflexiones.removeAllViews()
         reflexiones.forEach { reflexion ->
             containerReflexiones.addView(crearCardReflexion(reflexion))
         }
     }
-
     private fun crearCardReflexion(reflexion: DiarioEmocional): LinearLayout {
         return LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -164,11 +189,9 @@ class DiarioEmocionalActivity : AppCompatActivity() {
             ).apply { setMargins(0, 0, 0, 16) }
 
             addView(createDateTextView(reflexion.timestamp))
-            // Contenedor horizontal con emoción y descripción
             addView(createHorizontalContent(reflexion))
         }
     }
-
     private fun createDateTextView(timestamp: Date): TextView {
         return TextView(this).apply {
             text = "${dateFormat.format(timestamp)} - ${timeFormat.format(timestamp)}"
@@ -176,7 +199,6 @@ class DiarioEmocionalActivity : AppCompatActivity() {
             setTextColor(getColor(R.color.text_secondary))
         }
     }
-
     private fun createHorizontalContent(reflexion: DiarioEmocional): LinearLayout {
         return LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
