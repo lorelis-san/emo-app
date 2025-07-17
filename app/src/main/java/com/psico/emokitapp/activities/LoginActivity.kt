@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.psico.emokitapp.R
 import com.psico.emokitapp.viewmodel.UsuarioViewModel
+import com.psico.emokitapp.utils.SessionManager
 
 class LoginActivity : AppCompatActivity() {
 
@@ -22,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
         val etEmail = findViewById<TextInputEditText>(R.id.etLoginEmail)
         val etPassword = findViewById<TextInputEditText>(R.id.etLoginPassword)
         val btnLogin = findViewById<Button>(R.id.btnLoginUser)
-
+        val tvRegister = findViewById<TextView>(R.id.tvRegister)
 
         btnLogin.setOnClickListener {
             val email = etEmail.text.toString().trim()
@@ -33,33 +34,24 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            usuarioViewModel.verificarLogin(email, password) { correcto ->
-                runOnUiThread {
-                    if (correcto) {
-                        Toast.makeText(this, "Login correcto", Toast.LENGTH_SHORT).show()
-                        // Descomenta cuando tengas HomeActivity
-                         startActivity(Intent(this, HomeActivity::class.java))
+            // Usar el método con callback
+            usuarioViewModel.obtenerUsuarioPorCorreo(email) { usuario ->
+                if (usuario != null && usuario.contrasena == password) {
+                    // Guardar sesión
+                    val sessionManager = SessionManager(this@LoginActivity)
+                    sessionManager.saveUserSession(usuario)
 
-                        val sharedPref = getSharedPreferences("EmokitPreferences", MODE_PRIVATE)
-                        sharedPref.edit().putString("user_email", email).apply()
-                        // finish()
-                    } else {
-                        Toast.makeText(this, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
-                    }
+                    Toast.makeText(this@LoginActivity, "Login correcto", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(this@LoginActivity, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
                 }
             }
-
-
         }
 
-        val tvRegister = findViewById<TextView>(R.id.tvRegister)
         tvRegister.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
-
-
-
-
     }
 }

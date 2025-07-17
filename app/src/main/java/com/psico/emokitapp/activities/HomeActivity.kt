@@ -1,25 +1,24 @@
 package com.psico.emokitapp.activities
+
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.google.android.material.card.MaterialCardView
-import com.psico.emokitapp.R
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.navigation.NavigationBarView
+import com.psico.emokitapp.R
 import com.psico.emokitapp.data.EmokitDatabase
 import com.psico.emokitapp.data.EmotionalState
+import com.psico.emokitapp.data.entities.Usuario
+import com.psico.emokitapp.utils.SessionManager
 import com.psico.emokitapp.views.EmotionalStateChart
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
-
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var database: EmokitDatabase
@@ -28,11 +27,18 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var tvDescripcionEstado: TextView
     private lateinit var tvPorcentajeEmocional: TextView
 
+    private fun obtenerUsuarioActual(): Usuario? {
+        val sessionManager = SessionManager(this)
+        return sessionManager.getUserSession()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_UNLABELED
+
         val cardDiario = findViewById<MaterialCardView>(R.id.cardDiario)
         val cardRetos = findViewById<MaterialCardView>(R.id.cardRetos)
         val cardMeditaciones = findViewById<MaterialCardView>(R.id.cardMeditaciones)
@@ -43,7 +49,14 @@ class HomeActivity : AppCompatActivity() {
         }
 
         cardRetos.setOnClickListener {
-            startActivity(Intent(this, RetosDiariosActivity::class.java))
+            val usuario = obtenerUsuarioActual()
+            if (usuario != null) {
+                val intent = Intent(this, RetosDiariosActivity::class.java)
+                intent.putExtra("user_email", usuario.correo)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Usuario no logueado", Toast.LENGTH_SHORT).show()
+            }
         }
 
         cardMeditaciones.setOnClickListener {
@@ -56,17 +69,7 @@ class HomeActivity : AppCompatActivity() {
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> {
-                    true
-                }
-//                R.id.nav_add -> {
-//                    if (this !is AddActivity) {
-//                        startActivity(Intent(this, AddActivity::class.java))
-//                        finish()
-//                    }
-//                    true
-//                }
-
+                R.id.nav_home -> true
                 R.id.nav_profile -> {
                     if (this::class != ProfileActivity::class) {
                         startActivity(Intent(this, ProfileActivity::class.java))
@@ -77,6 +80,7 @@ class HomeActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
         initializeEmotionalChart()
     }
 
@@ -89,6 +93,7 @@ class HomeActivity : AppCompatActivity() {
 
         loadTodayEmotionalState()
     }
+
     private fun loadTodayEmotionalState() {
         lifecycleScope.launch {
             val todayStart = getStartOfDay()
@@ -148,6 +153,7 @@ class HomeActivity : AppCompatActivity() {
             set(Calendar.MILLISECOND, 999)
         }.time
     }
+
     override fun onResume() {
         super.onResume()
         if (::database.isInitialized) {
