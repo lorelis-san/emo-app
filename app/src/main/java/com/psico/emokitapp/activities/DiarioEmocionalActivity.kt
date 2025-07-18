@@ -23,6 +23,7 @@ import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import com.psico.emokitapp.helpers.ReflexionCardHelper
 
 class DiarioEmocionalActivity : AppCompatActivity() {
 
@@ -30,6 +31,7 @@ class DiarioEmocionalActivity : AppCompatActivity() {
     private lateinit var containerReflexiones: LinearLayout
     private lateinit var layoutReflexiones: LinearLayout
     private lateinit var etDescripcion: EditText
+    private lateinit var cardHelper: ReflexionCardHelper
 
     private var emocionSeleccionada: String = ""
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -67,6 +69,7 @@ class DiarioEmocionalActivity : AppCompatActivity() {
         containerReflexiones = findViewById(R.id.containerReflexiones)
         layoutReflexiones = findViewById(R.id.layoutReflexiones)
         etDescripcion = findViewById(R.id.etDescripcion)
+        cardHelper = ReflexionCardHelper(this)
 
         emotionButtons = listOf(
             findViewById(R.id.btnFeliz),
@@ -175,56 +178,10 @@ class DiarioEmocionalActivity : AppCompatActivity() {
     private fun mostrarReflexiones(reflexiones: List<DiarioEmocional>) {
         containerReflexiones.removeAllViews()
         reflexiones.forEach { reflexion ->
-            containerReflexiones.addView(crearCardReflexion(reflexion))
+            containerReflexiones.addView(cardHelper.crearCardReflexion(reflexion))
         }
     }
-    private fun crearCardReflexion(reflexion: DiarioEmocional): LinearLayout {
-        return LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(16, 16, 16, 16)
-            setBackgroundResource(android.R.color.white)
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply { setMargins(0, 0, 0, 16) }
 
-            addView(createDateTextView(reflexion.timestamp))
-            addView(createHorizontalContent(reflexion))
-        }
-    }
-    private fun createDateTextView(timestamp: Date): TextView {
-        return TextView(this).apply {
-            text = "${dateFormat.format(timestamp)} - ${timeFormat.format(timestamp)}"
-            textSize = 12f
-            setTextColor(getColor(R.color.text_secondary))
-        }
-    }
-    private fun createHorizontalContent(reflexion: DiarioEmocional): LinearLayout {
-        return LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            setPadding(0, 8, 0, 0)
-            addView(createEmotionIcon(reflexion.emocion))
-            addView(createDescriptionText(reflexion.descripcion))
-        }
-    }
-    private fun createEmotionIcon(emocion: String): ImageView {
-        return ImageView(this).apply {
-            val drawable = Emocion.fromNombre(emocion)?.drawable ?: R.drawable.ic_serious
-            setImageResource(drawable)
-            layoutParams = LinearLayout.LayoutParams(64, 64).apply {
-                setMargins(0, 0, 16, 0)
-            }
-        }
-    }
-    private fun createDescriptionText(descripcion: String): TextView {
-        return TextView(this).apply {
-            text = descripcion
-            textSize = 14f
-            setTextColor(getColor(R.color.text_primary))
-            maxLines = 2
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-        }
-    }
     private fun mostrarEntradasDelDia() {
         lifecycleScope.launch {
             val hoy = getStartOfDay()

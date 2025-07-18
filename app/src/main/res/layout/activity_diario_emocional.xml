@@ -51,9 +51,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="¿Cómo te sientes hoy?"
-            android:textSize="32sp"
+            android:textSize="37sp"
             android:textStyle="bold"
-            android:textColor="#6C63FF"
+            android:textColor="#3D305C"
             android:gravity="center"
             android:layout_marginBottom="16dp" />
 
@@ -65,7 +65,7 @@
             android:textSize="14sp"
             android:textColor="#718096"
             android:gravity="center"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="20dp"
             android:text="16/07/2025 - 21:31" />
 
         <!-- Contenedor de emociones -->

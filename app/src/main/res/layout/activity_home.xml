@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient_emokit"
+    android:background="#FFEEE6"
     android:padding="16dp">
 
     <!-- Título -->
@@ -13,24 +13,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="EMOKIT"
-        android:textSize="35sp"
+        android:textSize="38sp"
         android:textStyle="bold"
-        android:textColor="#4B0082"
+        android:textColor="#3D305C"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="35dp"
         android:layout_marginStart="24dp"/>
-
-    <!-- Botón de configuración -->
-<!--    <TextView-->
-<!--        android:id="@+id/btnSettings"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="⚙️"-->
-<!--        android:textSize="24sp"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        android:layout_margin="16dp" />-->
 
     <!-- Cuatro tarjetas horizontales con más margen lateral y menos altura -->
     <LinearLayout
@@ -46,15 +35,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- CARD 1: Diario emocional -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardDiario"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="85dp"
+            android:layout_height="100dp"
             android:layout_margin="6dp"
-            app:cardCornerRadius="16dp"
-            app:cardBackgroundColor="#e7dced"
-            app:cardElevation="4dp">
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="#F3E5F5"
+            app:cardElevation="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -62,16 +52,29 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
+                <View
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@drawable/circle_background_primary" />
+
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:src="@drawable/ic_diario_emocional" />
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="-48dp"
+                    android:layout_marginBottom="6dp"
+                    android:src="@drawable/ic_diario_emocional"
+                    app:tint="#4B0082" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Diario emocional"
+                    android:text="Diario\nemocional"
                     android:textSize="9sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:textColor="#4B0082"
+                    android:textAlignment="center"
+                    android:lineSpacingMultiplier="0.9" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -80,11 +83,11 @@
             android:id="@+id/cardRetos"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="85dp"
+            android:layout_height="100dp"
             android:layout_margin="6dp"
-            app:cardCornerRadius="16dp"
-            app:cardBackgroundColor="#e7dced"
-            app:cardElevation="4dp">
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="#E8F5E8"
+            app:cardElevation="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -92,16 +95,29 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
+                <View
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@drawable/circle_background_green" />
+
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:src="@drawable/ic_retos_diarios" />
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="-48dp"
+                    android:layout_marginBottom="6dp"
+                    android:src="@drawable/ic_retos_diarios"
+                    app:tint="#2E7D32" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Retos diarios"
+                    android:text="Retos\ndiarios"
                     android:textSize="9sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:textColor="#2E7D32"
+                    android:textAlignment="center"
+                    android:lineSpacingMultiplier="0.9" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -110,28 +126,46 @@
             android:id="@+id/cardMeditaciones"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="85dp"
-            android:layout_margin="6dp"
-            app:cardCornerRadius="16dp"
-            app:cardBackgroundColor="#e7dced"
-            app:cardElevation="4dp">
+            android:layout_height="100dp"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="#E3F2FD"
+            app:cardElevation="6dp"
+            app:strokeWidth="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <View
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@drawable/circle_background_blue" />
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:src="@drawable/ic_meditaciones" />
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="-48dp"
+                    android:layout_marginBottom="6dp"
+                    android:src="@drawable/ic_meditaciones"
+                    app:tint="#1976D2" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Meditaciones"
-                    android:textSize="9sp"
-                    android:textStyle="bold"/>
+                    android:text="Meditacion"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:textColor="#1976D2"
+                    android:textAlignment="center"
+                    android:lineSpacingMultiplier="0.9" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -140,28 +174,46 @@
             android:id="@+id/cardProgreso"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="85dp"
-            android:layout_margin="6dp"
-            app:cardCornerRadius="16dp"
-            app:cardBackgroundColor="#e7dced"
-            app:cardElevation="4dp">
+            android:layout_height="100dp"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="#FFF3E0"
+            app:cardElevation="6dp"
+            app:strokeWidth="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <View
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@drawable/circle_background_orange" />
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:src="@drawable/ic_progreso" />
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="-48dp"
+                    android:layout_marginBottom="6dp"
+                    android:src="@drawable/ic_progreso"
+                    app:tint="#F57C00" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Progreso"
-                    android:textSize="9sp"
-                    android:textStyle="bold"/>
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:textColor="#F57C00"
+                    android:textAlignment="center"
+                    android:lineSpacingMultiplier="0.9" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
@@ -173,7 +225,7 @@
         android:textStyle="bold"
         android:text="Haz de hoy tu día."
         android:textSize="20sp"
-        android:textColor="#4B0082"
+        android:textColor="#3D305C"
         app:layout_constraintTop_toBottomOf="@id/linearLayoutCards"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -205,8 +257,8 @@
             <!-- Emoji central -->
             <ImageView
                 android:id="@+id/imgEmocionPrincipal"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_emotion_happy" />
         </FrameLayout>
@@ -219,7 +271,7 @@
             android:text="Estado emocional de hoy"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#4B0082" />
+            android:textColor="#3D305C" />
 
         <!-- Porcentaje de la emoción principal -->
         <TextView
@@ -246,4 +298,3 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
