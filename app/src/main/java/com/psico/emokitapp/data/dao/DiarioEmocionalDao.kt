@@ -11,7 +11,6 @@ import java.util.Date
 @Dao
 interface DiarioEmocionalDao {
 
-    // === CONSULTAS DE LECTURA ===
 
     @Query("SELECT * FROM diario_emocional WHERE usuario_correo = :usuarioCorreo ORDER BY timestamp DESC")
     suspend fun getAllEntradas(usuarioCorreo: String): List<DiarioEmocional>
@@ -50,8 +49,6 @@ interface DiarioEmocionalDao {
         usuarioCorreo: String,
         fecha: Date
     ): Int
-
-    // === OPERACIONES DE ESCRITURA ===
 
     @Insert
     suspend fun insertEntrada(entrada: DiarioEmocional)

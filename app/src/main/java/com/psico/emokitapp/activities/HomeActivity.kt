@@ -80,6 +80,13 @@ class HomeActivity : AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> true
+                R.id.nav_add -> {
+                    if (this::class != HomeActivity::class) {
+                        startActivity(Intent(this, DiarioEmocionalActivity::class.java))
+                        finish()
+                    }
+                    true
+                }
                 R.id.nav_profile -> {
                     if (this::class != ProfileActivity::class) {
                         startActivity(Intent(this, ProfileActivity::class.java))

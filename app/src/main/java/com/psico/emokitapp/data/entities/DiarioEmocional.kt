@@ -17,7 +17,7 @@ data class DiarioEmocional (
     val fecha: Date,
     val timestamp: Date = Date(),
     @ColumnInfo(name = "usuario_correo")
-    val usuarioCorreo: String // ✅ nuevo campo para asociar al usuario logueado
+    val usuarioCorreo: String
 )
 class DateConverter {
     @TypeConverter

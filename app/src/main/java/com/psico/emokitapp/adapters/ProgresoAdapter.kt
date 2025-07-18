@@ -16,7 +16,7 @@ class ProgresoAdapter : RecyclerView.Adapter<ProgresoAdapter.ProgresoViewHolder>
         fun bind(reto: RetoCompletado) {
             binding.tvTituloReto.text = reto.retoTitulo
             binding.tvDescripcionReto.text = "📅 ${reto.fecha}"
-//            binding.tvRecompensaReto.text = "🏆 ¡Completado!"
+
         }
     }
 

@@ -100,8 +100,8 @@ class RetosDiariosActivity : AppCompatActivity() {
         )
         lifecycleScope.launch {
             retoCompletadoViewModel.insertarRetoCompletado(retoCompletado)
-            showRewardMessage(reto.recompensa) // muestra recompensa tras guardar
-            updateProgress() // actualiza progreso tras guardar
+            showRewardMessage(reto.recompensa)
+            updateProgress()
         }
 
     }

@@ -34,14 +34,13 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Usar el método con callback
             usuarioViewModel.obtenerUsuarioPorCorreo(email) { usuario ->
                 if (usuario != null && usuario.contrasena == password) {
                     // Guardar sesión
                     val sessionManager = SessionManager(this@LoginActivity)
                     sessionManager.saveUserSession(usuario)
 
-                    Toast.makeText(this@LoginActivity, "Login correcto", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@LoginActivity, "Login correcto", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
                     finish()
                 } else {

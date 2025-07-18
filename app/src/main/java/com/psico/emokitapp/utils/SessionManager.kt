@@ -8,7 +8,7 @@ class SessionManager(context: Context) {
 
     fun saveUserSession(usuario: Usuario) {
         prefs.edit()
-            .putInt("user_id", usuario.id)  // ✅ Agregar ID
+            .putInt("user_id", usuario.id)
             .putString("user_nombre", usuario.nombre)
             .putString("user_correo", usuario.correo)
             .putString("user_contrasena", usuario.contrasena)
@@ -16,7 +16,7 @@ class SessionManager(context: Context) {
     }
 
     fun getUserSession(): Usuario? {
-        val id = prefs.getInt("user_id", 0)  // ✅ Obtener ID
+        val id = prefs.getInt("user_id", 0)
         val nombre = prefs.getString("user_nombre", null)
         val correo = prefs.getString("user_correo", null)
         val contrasena = prefs.getString("user_contrasena", null)
@@ -28,11 +28,10 @@ class SessionManager(context: Context) {
         }
     }
 
-    fun clearUserSession() {  // ✅ Cambiar nombre para consistencia
+    fun clearUserSession() {
         prefs.edit().clear().apply()
     }
 
-    // ✅ Método adicional útil
     fun isLoggedIn(): Boolean {
         return getUserSession() != null
     }

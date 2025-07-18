@@ -37,7 +37,6 @@ class UsuarioViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    // ✅ Versión segura con callback, lista para usar en LoginActivity
     fun obtenerUsuarioPorCorreo(correo: String, callback: (Usuario?) -> Unit) {
         viewModelScope.launch {
             val usuario = repository.obtenerPorCorreo(correo)

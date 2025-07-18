@@ -41,14 +41,13 @@ class ProfileActivity : AppCompatActivity() {
             return
         }
 
-        // ✅ Botón para cerrar sesión
         btnEditProfile.setOnClickListener {
             sessionManager.clearUserSession()
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
 
-        // ✅ Configuración de barra de navegación
+
         bottomNavigationView.selectedItemId = R.id.nav_profile
 
         bottomNavigationView.setOnItemSelectedListener { item ->
@@ -56,6 +55,13 @@ class ProfileActivity : AppCompatActivity() {
                 R.id.nav_home -> {
                     if (this::class != HomeActivity::class) {
                         startActivity(Intent(this, HomeActivity::class.java))
+                        finish()
+                    }
+                    true
+                }
+                R.id.nav_add -> {
+                    if (this::class != HomeActivity::class) {
+                        startActivity(Intent(this, DiarioEmocionalActivity::class.java))
                         finish()
                     }
                     true

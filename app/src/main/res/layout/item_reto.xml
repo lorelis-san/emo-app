@@ -19,7 +19,7 @@
         android:padding="16dp"
         android:gravity="center_vertical">
 
-        <!-- Checkbox -->
+
         <CheckBox
             android:id="@+id/retoCheckbox"
             android:layout_width="wrap_content"
@@ -29,7 +29,6 @@
             android:clickable="false"
             android:focusable="false" />
 
-        <!-- Contenido del reto -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -57,7 +56,6 @@
 
         </LinearLayout>
 
-        <!-- Recompensa -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

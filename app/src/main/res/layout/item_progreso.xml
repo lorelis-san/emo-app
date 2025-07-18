@@ -4,14 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="0dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="8dp"
     app:cardUseCompatPadding="true"
-    app:cardBackgroundColor="#B7B4FFFF">
+    app:cardBackgroundColor="#D1F3F0">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,8 +19,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-
-        <!-- Contenido del reto -->
         <TextView
             android:id="@+id/tvTituloReto"
             android:layout_width="match_parent"
@@ -29,6 +27,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="#1E1B4B"
+
             android:gravity="center"
             android:maxLines="2"
             android:ellipsize="end"
