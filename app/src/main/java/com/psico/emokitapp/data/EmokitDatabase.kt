@@ -14,7 +14,7 @@ import com.psico.emokitapp.data.entities.RetoCompletado
 import com.psico.emokitapp.data.entities.Usuario
 
 @Database(    entities = [Usuario::class, DiarioEmocional::class, RetoCompletado::class],
-    version = 5,
+    version = 6,
     exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class EmokitDatabase : RoomDatabase() {

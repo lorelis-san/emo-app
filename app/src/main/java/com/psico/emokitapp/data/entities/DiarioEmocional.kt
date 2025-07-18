@@ -1,5 +1,6 @@
 package com.psico.emokitapp.data.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
@@ -14,7 +15,9 @@ data class DiarioEmocional (
     val emocion: String,
     val descripcion: String,
     val fecha: Date,
-    val timestamp: Date = Date()
+    val timestamp: Date = Date(),
+    @ColumnInfo(name = "usuario_correo")
+    val usuarioCorreo: String // ✅ nuevo campo para asociar al usuario logueado
 )
 class DateConverter {
     @TypeConverter

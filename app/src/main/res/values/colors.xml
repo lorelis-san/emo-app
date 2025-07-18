@@ -41,4 +41,10 @@
     <!-- Colores del diario -->
     <color name="text_primary_diary">#2D3748</color>
     <color name="text_secondary">#718096</color>
+
+    <color name="verde_completado">#4CAF50</color>
+    <color name="azul_disponible">#2196F3</color>
+    <color name="gris_bloqueado">#9E9E9E</color>
+    <color name="naranja_progreso">#FF9800</color>
+    <color name="morado_titulo">#4A148C</color>
 </resources>

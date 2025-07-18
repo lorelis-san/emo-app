@@ -85,5 +85,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 
+    implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
+
+    implementation("androidx.cardview:cardview:1.0.0")
+
+
 
 }

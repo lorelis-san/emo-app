@@ -13,12 +13,11 @@ import com.google.android.material.navigation.NavigationBarView
 import com.psico.emokitapp.R
 import com.psico.emokitapp.data.EmokitDatabase
 import com.psico.emokitapp.data.EmotionalState
-import com.psico.emokitapp.data.entities.Usuario
 import com.psico.emokitapp.utils.SessionManager
 import com.psico.emokitapp.views.EmotionalStateChart
 import kotlinx.coroutines.launch
-import java.util.Calendar
-import java.util.Date
+import java.util.*
+
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var database: EmokitDatabase
@@ -27,14 +26,25 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var tvDescripcionEstado: TextView
     private lateinit var tvPorcentajeEmocional: TextView
 
-    private fun obtenerUsuarioActual(): Usuario? {
-        val sessionManager = SessionManager(this)
-        return sessionManager.getUserSession()
+    private lateinit var sessionManager: SessionManager
+    private var userEmail: String? = null
+
+    private fun obtenerUsuarioActualEmail(): String? {
+        sessionManager = SessionManager(this)
+        val usuario = sessionManager.getUserSession()
+        return usuario?.correo
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        userEmail = obtenerUsuarioActualEmail()
+        if (userEmail == null) {
+            Toast.makeText(this, "Usuario no logueado", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_UNLABELED
@@ -49,10 +59,10 @@ class HomeActivity : AppCompatActivity() {
         }
 
         cardRetos.setOnClickListener {
-            val usuario = obtenerUsuarioActual()
-            if (usuario != null) {
+            val correo = userEmail
+            if (correo != null) {
                 val intent = Intent(this, RetosDiariosActivity::class.java)
-                intent.putExtra("user_email", usuario.correo)
+                intent.putExtra("user_email", correo)
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "Usuario no logueado", Toast.LENGTH_SHORT).show()
@@ -99,10 +109,16 @@ class HomeActivity : AppCompatActivity() {
             val todayStart = getStartOfDay()
             val todayEnd = getEndOfDay()
 
-            val todayEntries = database.diarioEmocionalDao().getEntradasPorRango(todayStart, todayEnd)
-            val emotionalState = calculateEmotionalState(todayEntries.map { it.emocion })
-
-            updateEmotionalChart(emotionalState)
+            val correo = userEmail
+            if (correo != null) {
+                val todayEntries = database.diarioEmocionalDao().getEntradasPorUsuarioYRango(
+                    correo, todayStart, todayEnd
+                )
+                val emotionalState = calculateEmotionalState(todayEntries.map { it.emocion })
+                updateEmotionalChart(emotionalState)
+            } else {
+                Toast.makeText(this@HomeActivity, "Usuario no logueado", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
