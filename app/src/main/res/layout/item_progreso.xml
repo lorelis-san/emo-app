@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="6dp"
+    card_view:cardBackgroundColor="#F8E1E7">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTituloReto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Título del reto"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#1E1B4B" />
+
+        <TextView
+            android:id="@+id/tvDescripcionReto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha: yyyy-MM-dd"
+            android:layout_marginTop="6dp"
+            android:textSize="14sp"
+            android:textColor="#1E1B4B" />
+
+        <TextView
+            android:id="@+id/tvRecompensaReto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🏆 ¡Reto completado!"
+            android:layout_marginTop="6dp"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:textColor="#1E1B4B" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

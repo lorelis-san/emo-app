@@ -1,14 +1,17 @@
 package com.psico.emokitapp.activities
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.psico.emokitapp.adapters.RetosAdapter
 import com.psico.emokitapp.data.entities.Reto
+import com.psico.emokitapp.data.entities.RetoCompletado
 import com.psico.emokitapp.databinding.ActivityRetosDiariosBinding
+import com.psico.emokitapp.viewmodel.RetoCompletadoViewModel
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
@@ -17,19 +20,23 @@ class RetosDiariosActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRetosDiariosBinding
     private lateinit var retosAdapter: RetosAdapter
-    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var userEmail: String
 
     private var completedChallenges = 0
     private val totalDailyChallenges = 4
+
+    private val retoCompletadoViewModel: RetoCompletadoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRetosDiariosBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        userEmail = intent.getStringExtra("user_email") ?: "unknown_user"
-        sharedPreferences = getSharedPreferences("EmokitPrefs_${userEmail}", Context.MODE_PRIVATE)
+        userEmail = intent.getStringExtra("user_email") ?: run {
+            Toast.makeText(this, "Usuario no encontrado", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
         setupUI()
         setupRetosRecyclerView()
@@ -41,7 +48,7 @@ class RetosDiariosActivity : AppCompatActivity() {
     }
 
     private fun setupRetosRecyclerView() {
-        val dailyRetos = getDailyRetos().toMutableList()
+        val dailyRetos = generateDailyRetos().toMutableList()
 
         retosAdapter = RetosAdapter(dailyRetos) { reto ->
             toggleRetoCompletion(reto)
@@ -49,19 +56,6 @@ class RetosDiariosActivity : AppCompatActivity() {
 
         binding.retosRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.retosRecyclerView.adapter = retosAdapter
-    }
-
-    private fun getDailyRetos(): List<Reto> {
-        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-        val savedDate = sharedPreferences.getString("last_retos_date", "")
-
-        return if (savedDate != today) {
-            val newRetos = generateDailyRetos()
-            saveDailyRetos(newRetos, today)
-            newRetos
-        } else {
-            loadSavedRetos()
-        }
     }
 
     private fun generateDailyRetos(): List<Reto> {
@@ -90,43 +84,26 @@ class RetosDiariosActivity : AppCompatActivity() {
         Reto(16, "Haz algo por ti mismo", "Dedica tiempo a una actividad que realmente disfrutes", false, "🏆")
     )
 
-    private fun saveDailyRetos(retos: List<Reto>, date: String) {
-        val editor = sharedPreferences.edit()
-        editor.putString("last_retos_date", date)
-        retos.forEachIndexed { index, reto ->
-            editor.putString("reto_${index}_titulo", reto.titulo)
-            editor.putString("reto_${index}_descripcion", reto.descripcion)
-            editor.putString("reto_${index}_recompensa", reto.recompensa)
-            editor.putBoolean("reto_${index}_completado", reto.completado)
-        }
-        editor.apply()
-    }
-
-    private fun loadSavedRetos(): List<Reto> {
-        val retos = mutableListOf<Reto>()
-        for (i in 0 until totalDailyChallenges) {
-            val titulo = sharedPreferences.getString("reto_${i}_titulo", "") ?: ""
-            val descripcion = sharedPreferences.getString("reto_${i}_descripcion", "") ?: ""
-            val recompensa = sharedPreferences.getString("reto_${i}_recompensa", "🏅") ?: "🏅"
-            val completado = sharedPreferences.getBoolean("reto_${i}_completado", false)
-
-            if (titulo.isNotEmpty()) {
-                retos.add(Reto(i + 1, titulo, descripcion, completado, recompensa))
-            }
-        }
-        return retos
-    }
-
     private fun toggleRetoCompletion(reto: Reto) {
-        val newStatus = !reto.completado
-        sharedPreferences.edit().putBoolean("reto_${reto.id - 1}_completado", newStatus).apply()
+        if (reto.completado) {
+            Toast.makeText(this, "Este reto ya fue completado", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        retosAdapter.updateReto(reto.copy(completado = newStatus))
-        completedChallenges += if (newStatus) 1 else -1
+        retosAdapter.updateReto(reto.copy(completado = true))
+        completedChallenges++
 
-        if (newStatus) showRewardMessage(reto.recompensa)
+        val retoCompletado = RetoCompletado(
+            usuarioCorreo = userEmail,
+            retoTitulo = reto.titulo,
+            fecha = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        )
+        lifecycleScope.launch {
+            retoCompletadoViewModel.insertarRetoCompletado(retoCompletado)
+            showRewardMessage(reto.recompensa) // muestra recompensa tras guardar
+            updateProgress() // actualiza progreso tras guardar
+        }
 
-        updateProgress()
     }
 
     private fun showRewardMessage(reward: String) {
@@ -134,9 +111,6 @@ class RetosDiariosActivity : AppCompatActivity() {
     }
 
     private fun updateProgress() {
-        completedChallenges = (0 until totalDailyChallenges).count {
-            sharedPreferences.getBoolean("reto_${it}_completado", false)
-        }
         binding.progressText.text = "Completados: $completedChallenges/$totalDailyChallenges"
         binding.progressBar.progress = (completedChallenges * 100) / totalDailyChallenges
 

@@ -6,18 +6,21 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.psico.emokitapp.data.dao.DiarioEmocionalDao
+import com.psico.emokitapp.data.dao.RetoCompletadoDao
 import com.psico.emokitapp.data.dao.UsuarioDao
 import com.psico.emokitapp.data.entities.DateConverter
 import com.psico.emokitapp.data.entities.DiarioEmocional
+import com.psico.emokitapp.data.entities.RetoCompletado
 import com.psico.emokitapp.data.entities.Usuario
 
-@Database(    entities = [Usuario::class, DiarioEmocional::class],
-    version = 3,
+@Database(    entities = [Usuario::class, DiarioEmocional::class, RetoCompletado::class],
+    version = 5,
     exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class EmokitDatabase : RoomDatabase() {
     abstract fun usuarioDao(): UsuarioDao
     abstract fun diarioEmocionalDao(): DiarioEmocionalDao
+    abstract fun retoCompletadoDao(): RetoCompletadoDao
 
     companion object {
         @Volatile
