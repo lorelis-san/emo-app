@@ -4,15 +4,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient_emokit"
+    android:background="@drawable/bg_gradient_down"
     android:padding="24dp">
+
+
+    <ImageView
+        android:id="@+id/imgDecorative"
+        android:layout_width="300dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="0dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_wave_background"
+        app:layout_constraintTop_toBottomOf="@id/tvUserEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/tvProfileTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mi Perfil"
-        android:textSize="28sp"
+        android:textSize="34sp"
         android:textStyle="bold"
         android:textColor="#4B0082"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,10 +34,13 @@
 
     <ImageView
         android:id="@+id/imgProfile"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:src="@drawable/ic_profile"
         android:layout_marginTop="16dp"
+        android:backgroundTint="#FDFDFD"
+        android:padding="8dp"
+        android:scaleType="centerCrop"
         app:layout_constraintTop_toBottomOf="@id/tvProfileTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,7 +52,7 @@
         android:layout_height="wrap_content"
         android:text="Nombre del Usuario"
         android:textSize="20sp"
-        android:textColor="#2C1340"
+        android:textColor="@color/primary_orange"
         android:textStyle="bold"
         android:layout_marginTop="12dp"
         app:layout_constraintTop_toBottomOf="@id/imgProfile"
@@ -56,27 +71,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/btnEditProfile"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/tvMotivational"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cerrar Sesión"
-        android:backgroundTint="#F28C57"
-        android:textColor="#FFFFFF"
-        android:layout_marginTop="24dp"
-        android:padding="12dp"
+        android:text="“Hoy es un buen día para crecer.”"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:textColor="#4B0082"
+        android:layout_marginTop="40dp"
         app:layout_constraintTop_toBottomOf="@id/tvUserEmail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/btnEditProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cerrar Sesión"
+        android:backgroundTint="@color/naranja_progreso"
+        android:textColor="#FFFFFF"
+        android:textAllCaps="false"
+        android:layout_marginTop="20dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        app:cornerRadius="20dp"
+        app:layout_constraintTop_toBottomOf="@id/tvMotivational"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@android:color/transparent"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="unlabeled"
+        style="@style/BottomNavigationViewStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

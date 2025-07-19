@@ -10,19 +10,32 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.psico.emokitapp.R
 import com.psico.emokitapp.viewmodel.UsuarioViewModel
+import com.psico.emokitapp.utils.SessionManager
 
 class LoginActivity : AppCompatActivity() {
 
     private val usuarioViewModel: UsuarioViewModel by viewModels()
+    private lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        sessionManager = SessionManager(this)
+
+        if (sessionManager.isLoggedIn()) {
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_login)
 
         val etEmail = findViewById<TextInputEditText>(R.id.etLoginEmail)
         val etPassword = findViewById<TextInputEditText>(R.id.etLoginPassword)
         val btnLogin = findViewById<Button>(R.id.btnLoginUser)
-
+        val tvRegister = findViewById<TextView>(R.id.tvRegister)
 
         btnLogin.setOnClickListener {
             val email = etEmail.text.toString().trim()
@@ -33,33 +46,56 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            usuarioViewModel.verificarLogin(email, password) { correcto ->
-                runOnUiThread {
-                    if (correcto) {
-                        Toast.makeText(this, "Login correcto", Toast.LENGTH_SHORT).show()
-                        // Descomenta cuando tengas HomeActivity
-                         startActivity(Intent(this, HomeActivity::class.java))
+            if (!isValidEmail(email)) {
+                Toast.makeText(this, "Ingresa un email válido", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-                        val sharedPref = getSharedPreferences("EmokitPreferences", MODE_PRIVATE)
-                        sharedPref.edit().putString("user_email", email).apply()
-                        // finish()
+            if (password.length < 6) {
+                Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            btnLogin.isEnabled = false
+            btnLogin.text = "Iniciando..."
+
+            usuarioViewModel.obtenerUsuarioPorCorreo(email) { usuario ->
+                runOnUiThread {
+                    // Restaurar botón
+                    btnLogin.isEnabled = true
+                    btnLogin.text = "Iniciar Sesión"
+
+                    if (usuario != null && usuario.contrasena == password) {
+                        sessionManager.saveUserSession(usuario, rememberSession = true)
+
+                        Toast.makeText(this@LoginActivity, "¡Bienvenido ${usuario.nombre}!", Toast.LENGTH_SHORT).show()
+
+                        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                        finish()
                     } else {
-                        Toast.makeText(this, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
+                        if (usuario == null) {
+                            Toast.makeText(this@LoginActivity, "El email no está registrado", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this@LoginActivity, "Contraseña incorrecta", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }
-
-
         }
 
-        val tvRegister = findViewById<TextView>(R.id.tvRegister)
         tvRegister.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
+    }
 
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
 
-
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
     }
 }

@@ -7,10 +7,26 @@
         <item name="android:windowBackground">@color/background</item>
         <item name="android:textColor">@color/text_primary</item>
 
+
+        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="31">@android:color/transparent</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@drawable/ic_launcher_background</item>
+        <item name="android:windowSplashScreenBackground" tools:targetApi="31">@android:color/white</item> <!-- o el fondo que desees -->
+
     </style>
     <style name="RoundedCornersTextInput" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item> <!-- ajusta según gusto -->
+    </style>
+
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconSize">32dp</item> <!-- Aumenta el tamaño del ícono -->
+    </style>
+
+    <style name="BottomNavTextStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="itemTextAppearanceActive">@style/BottomNavTextStyle</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavTextStyle</item>
+
     </style>
 
 </resources>

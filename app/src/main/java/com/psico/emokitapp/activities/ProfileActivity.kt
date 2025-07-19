@@ -3,15 +3,14 @@ package com.psico.emokitapp.activities
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TextView
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
-import com.psico.emokitapp.R
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.lifecycle.lifecycleScope
+import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.psico.emokitapp.R
 import com.psico.emokitapp.viewmodel.UsuarioViewModel
-import kotlinx.coroutines.launch
+import com.psico.emokitapp.utils.SessionManager
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -25,31 +24,30 @@ class ProfileActivity : AppCompatActivity() {
         val tvUserName = findViewById<TextView>(R.id.tvUserName)
         val tvUserEmail = findViewById<TextView>(R.id.tvUserEmail)
         val imgProfile = findViewById<ImageView>(R.id.imgProfile)
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
-        val sharedPref = getSharedPreferences("EmokitPreferences", MODE_PRIVATE)
-        val userEmail = sharedPref.getString("user_email", null)
+        // ✅ Usar SessionManager consistentemente
+        val sessionManager = SessionManager(this)
+        val usuario = sessionManager.getUserSession()
 
-        lifecycleScope.launch {
-            userEmail?.let { email ->
-                val usuario = usuarioViewModel.obtenerUsuarioPorCorreo(email)
-                usuario?.let {
-                    tvUserName.text = it.nombre
-                    tvUserEmail.text = it.correo
-                }
-            }
+        // ✅ Mostrar datos del usuario actual
+        if (usuario != null) {
+            tvUserName.text = usuario.nombre
+            tvUserEmail.text = usuario.correo
+        } else {
+            // Si no hay sesión guardada, ir a login
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
         }
 
         btnEditProfile.setOnClickListener {
-            // Cerrar sesión
-            val editor = sharedPref.edit()
-            editor.remove("user_email")
-            editor.apply()
+            sessionManager.clearUserSession()
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
 
-        // Configuración de la barra de navegación
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
         bottomNavigationView.selectedItemId = R.id.nav_profile
 
         bottomNavigationView.setOnItemSelectedListener { item ->
@@ -57,13 +55,16 @@ class ProfileActivity : AppCompatActivity() {
                 R.id.nav_home -> {
                     if (this::class != HomeActivity::class) {
                         startActivity(Intent(this, HomeActivity::class.java))
-                        finish()
                     }
                     true
                 }
-                R.id.nav_profile -> {
+                R.id.nav_add -> {
+                    if (this::class != HomeActivity::class) {
+                        startActivity(Intent(this, DiarioEmocionalActivity::class.java))
+                    }
                     true
                 }
+                R.id.nav_profile -> true
                 else -> false
             }
         }

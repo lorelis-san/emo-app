@@ -7,6 +7,7 @@ import androidx.room.Room
 import com.psico.emokitapp.data.EmokitDatabase
 import com.psico.emokitapp.data.entities.Usuario
 import com.psico.emokitapp.repository.UsuarioRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class UsuarioViewModel(application: Application) : AndroidViewModel(application) {
@@ -20,28 +21,27 @@ class UsuarioViewModel(application: Application) : AndroidViewModel(application)
             "emokit_db"
         ).build()
         repository = UsuarioRepository(db.usuarioDao())
-
     }
 
     fun insertar(usuario: Usuario) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.insertar(usuario)
         }
     }
 
     fun verificarLogin(correo: String, contrasena: String, onResult: (Boolean) -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val usuario = repository.obtenerPorCorreo(correo)
             val correcto = usuario != null && usuario.contrasena == contrasena
             onResult(correcto)
         }
     }
 
-
-    suspend fun obtenerUsuarioPorCorreo(correo: String): Usuario? {
-        return repository.obtenerPorCorreo(correo)
+    fun obtenerUsuarioPorCorreo(correo: String, callback: (Usuario?) -> Unit) {
+        viewModelScope.launch {
+            val usuario = repository.obtenerPorCorreo(correo)
+            callback(usuario)
+        }
     }
-
-
 
 }

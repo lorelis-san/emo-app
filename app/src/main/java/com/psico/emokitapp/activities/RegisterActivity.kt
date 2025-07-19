@@ -28,8 +28,27 @@ class RegisterActivity : AppCompatActivity() {
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
+            // Validar campos vacíos
             if (nombre.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Validar nombre mínimo
+            if (nombre.length < 2) {
+                Toast.makeText(this, "El nombre debe tener al menos 2 caracteres", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Validar email
+            if (!isValidEmail(email)) {
+                Toast.makeText(this, "Ingresa un email válido", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Validar contraseña
+            if (password.length < 6) {
+                Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -37,7 +56,11 @@ class RegisterActivity : AppCompatActivity() {
             usuarioViewModel.insertar(usuario)
 
             Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show()
-            finish() // Volver al login automáticamente
+            finish()
         }
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 }
