@@ -4,20 +4,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="2dp"
-    android:layout_marginBottom="0dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="8dp"
-    app:cardUseCompatPadding="true"
+    app:cardElevation="6dp"
     app:cardBackgroundColor="#D1F3F0">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/tvTituloReto"
@@ -26,12 +25,11 @@
             android:text="🏆 Título del Reto"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="#1E1B4B"
-
+            android:textColor="#161159"
             android:gravity="center"
             android:maxLines="2"
             android:ellipsize="end"
-            android:layout_marginBottom="1dp"/>
+            android:layout_marginBottom="4dp"/>
 
         <TextView
             android:id="@+id/tvDescripcionReto"
@@ -40,7 +38,6 @@
             android:text="Fecha: yyyy-MM-dd"
             android:textSize="10sp"
             android:textColor="#666666"
-            android:gravity="center"
-            android:layout_marginTop="1dp"/>
+            android:gravity="center"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
