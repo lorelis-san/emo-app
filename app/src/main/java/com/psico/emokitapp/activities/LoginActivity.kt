@@ -29,22 +29,49 @@ class LoginActivity : AppCompatActivity() {
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
+            // Validar campos vacíos
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            usuarioViewModel.obtenerUsuarioPorCorreo(email) { usuario ->
-                if (usuario != null && usuario.contrasena == password) {
-                    // Guardar sesión
-                    val sessionManager = SessionManager(this@LoginActivity)
-                    sessionManager.saveUserSession(usuario)
+            // Validar formato de email
+            if (!isValidEmail(email)) {
+                Toast.makeText(this, "Ingresa un email válido", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-//                    Toast.makeText(this@LoginActivity, "Login correcto", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
-                    finish()
-                } else {
-                    Toast.makeText(this@LoginActivity, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
+            // Validar longitud mínima de contraseña
+            if (password.length < 6) {
+                Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Deshabilitar botón para evitar múltiples clics
+            btnLogin.isEnabled = false
+            btnLogin.text = "Iniciando..."
+
+            usuarioViewModel.obtenerUsuarioPorCorreo(email) { usuario ->
+                runOnUiThread {
+                    // Restaurar botón
+                    btnLogin.isEnabled = true
+                    btnLogin.text = "Iniciar Sesión"
+
+                    if (usuario != null && usuario.contrasena == password) {
+                        // Guardar sesión
+                        val sessionManager = SessionManager(this@LoginActivity)
+                        sessionManager.saveUserSession(usuario)
+
+                        Toast.makeText(this@LoginActivity, "¡Bienvenido ${usuario.nombre}!", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
+                        finish()
+                    } else {
+                        if (usuario == null) {
+                            Toast.makeText(this@LoginActivity, "El email no está registrado", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this@LoginActivity, "Contraseña incorrecta", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
         }
@@ -52,5 +79,9 @@ class LoginActivity : AppCompatActivity() {
         tvRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 }
