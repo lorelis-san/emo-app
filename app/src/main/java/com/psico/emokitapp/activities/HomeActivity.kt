@@ -25,9 +25,53 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var imgEmocionPrincipal: ImageView
     private lateinit var tvDescripcionEstado: TextView
     private lateinit var tvPorcentajeEmocional: TextView
+    private lateinit var tvMotivacional: TextView
 
     private lateinit var sessionManager: SessionManager
     private var userEmail: String? = null
+
+    private val frasesMotivacionales = arrayOf(
+        "Haz de hoy tu día.",
+        "Cada día es una nueva oportunidad para crecer.",
+        "Tu actitud determina tu altitud.",
+        "El éxito es la suma de pequeños esfuerzos repetidos día tras día.",
+        "Cree en ti mismo y todo será posible.",
+        "Hoy es el primer día del resto de tu vida.",
+        "No esperes el momento perfecto, toma el momento y hazlo perfecto.",
+        "Tu única limitación eres tú mismo.",
+        "Los sueños no funcionan a menos que tú lo hagas.",
+        "Cada paso cuenta hacia tu meta.",
+        "La felicidad no es un destino, es una forma de vida.",
+        "Transforma tus heridas en sabiduría.",
+        "El progreso, no la perfección.",
+        "Eres más fuerte de lo que crees.",
+        "Hoy elige ser feliz.",
+        "Tu potencial es infinito.",
+        "Abraza el cambio, es donde está el crecimiento.",
+        "Pequeños pasos cada día llevan a grandes cambios cada año.",
+        "Tu mentalidad es todo.",
+        "Haz que suceda.",
+        "El mejor momento para plantar un árbol fue hace 20 años, el segundo mejor momento es ahora.",
+        "No cuentes los días, haz que los días cuenten.",
+        "La vida comienza fuera de tu zona de confort.",
+        "Eres el autor de tu propia historia.",
+        "Enfócate en el progreso, no en la perfección.",
+        "Tu energía es contagiosa, úsala sabiamente.",
+        "Cada amanecer trae nuevas posibilidades.",
+        "Confía en el proceso de la vida.",
+        "Lo que no te desafía, no te cambia.",
+        "Hoy es un buen día para tener un buen día.",
+        "La persistencia es el camino del éxito.",
+        "Convierte tus obstáculos en oportunidades.",
+        "El único fracaso es no intentarlo.",
+        "Tu momento es ahora.",
+        "Crea tu propia suerte trabajando duro.",
+        "Los límites solo existen en tu mente.",
+        "Cada día es una página en blanco de tu historia.",
+        "La magia sucede fuera de tu zona de confort.",
+        "Eres capaz de cosas increíbles.",
+        "Hoy puedes comenzar de nuevo."
+    )
 
     private fun obtenerUsuarioActualEmail(): String? {
         sessionManager = SessionManager(this)
@@ -45,6 +89,10 @@ class HomeActivity : AppCompatActivity() {
             finish()
             return
         }
+
+        // Inicializar la frase motivacional
+        tvMotivacional = findViewById(R.id.tvMotivacional)
+        setDailyMotivationalMessage()
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_UNLABELED
@@ -79,18 +127,20 @@ class HomeActivity : AppCompatActivity() {
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> true
-                R.id.nav_add -> {
+                R.id.nav_home -> {
                     if (this::class != HomeActivity::class) {
-                        startActivity(Intent(this, DiarioEmocionalActivity::class.java))
+                        startActivity(Intent(this, HomeActivity::class.java))
                         finish()
                     }
+                    true
+                }
+                R.id.nav_add -> {
+                    startActivity(Intent(this, DiarioEmocionalActivity::class.java))
                     true
                 }
                 R.id.nav_profile -> {
                     if (this::class != ProfileActivity::class) {
                         startActivity(Intent(this, ProfileActivity::class.java))
-                        finish()
                     }
                     true
                 }
@@ -99,6 +149,21 @@ class HomeActivity : AppCompatActivity() {
         }
 
         initializeEmotionalChart()
+    }
+
+    private fun setDailyMotivationalMessage() {
+        // Usar la fecha actual como semilla para que sea consistente durante todo el día
+        val calendar = Calendar.getInstance()
+        val dayOfYear = calendar.get(Calendar.DAY_OF_YEAR)
+        val year = calendar.get(Calendar.YEAR)
+
+        // Crear una semilla única para cada día
+        val seed = (year * 1000 + dayOfYear).toLong()
+        val random = Random(seed)
+
+        // Seleccionar una frase basada en el día
+        val fraseDelDia = frasesMotivacionales[random.nextInt(frasesMotivacionales.size)]
+        tvMotivacional.text = fraseDelDia
     }
 
     private fun initializeEmotionalChart() {
@@ -181,6 +246,10 @@ class HomeActivity : AppCompatActivity() {
         super.onResume()
         if (::database.isInitialized) {
             loadTodayEmotionalState()
+        }
+        // Actualizar la frase motivacional al resumir la actividad
+        if (::tvMotivacional.isInitialized) {
+            setDailyMotivationalMessage()
         }
     }
 }

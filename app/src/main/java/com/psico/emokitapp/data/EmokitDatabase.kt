@@ -24,7 +24,7 @@ import com.psico.emokitapp.utils.DateConverter
         ActividadMeditacion::class,
         ActividadCompletada::class
     ],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 @TypeConverters(DateConverter::class)

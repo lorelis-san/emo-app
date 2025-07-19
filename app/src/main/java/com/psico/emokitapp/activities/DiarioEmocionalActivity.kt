@@ -15,9 +15,11 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import androidx.annotation.RequiresApi
 
 class DiarioEmocionalActivity : AppCompatActivity() {
 
@@ -48,6 +50,7 @@ class DiarioEmocionalActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -84,6 +87,7 @@ class DiarioEmocionalActivity : AppCompatActivity() {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun setupInitialState() {
         val ahora = Date()
         findViewById<TextView>(R.id.tvFecha).text = "${dateFormat.format(ahora)} - ${timeFormat.format(ahora)}"
@@ -98,9 +102,14 @@ class DiarioEmocionalActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun setupListeners() {
         findViewById<Button>(R.id.btnGuardar).setOnClickListener { validarYGuardar() }
-        findViewById<ImageView>(R.id.btnBack).setOnClickListener { finish() }
+        findViewById<ImageView>(R.id.btnBack).setOnClickListener {
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun setupEmotionButtons() {
@@ -114,6 +123,7 @@ class DiarioEmocionalActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun validarYGuardar() {
         val descripcion = etDescripcion.text.toString().trim()
         when {
@@ -149,6 +159,7 @@ class DiarioEmocionalActivity : AppCompatActivity() {
         resetButtonEffects()
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun cargarReflexionesAnteriores() {
         lifecycleScope.launch {
             val reflexiones = database.diarioEmocionalDao().getUltimasReflexiones(userEmail, 5)
@@ -161,6 +172,7 @@ class DiarioEmocionalActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun mostrarReflexiones(reflexiones: List<DiarioEmocional>) {
         containerReflexiones.removeAllViews()
         reflexiones.forEach { reflexion ->
@@ -178,6 +190,7 @@ class DiarioEmocionalActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun guardarEntrada(descripcion: String) {
         lifecycleScope.launch {
             val nuevaEntrada = DiarioEmocional(

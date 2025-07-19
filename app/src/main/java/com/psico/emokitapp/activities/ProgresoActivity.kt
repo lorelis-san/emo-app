@@ -1,6 +1,7 @@
 package com.psico.emokitapp.activities
 
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -48,6 +49,7 @@ class ProgresoActivity : AppCompatActivity() {
         }
 
         setupRecyclerView()
+        setupClickListeners()
 
         barChartEmociones = findViewById(R.id.barChart)
         cargarGraficoEmociones(usuario.correo)
@@ -72,9 +74,6 @@ class ProgresoActivity : AppCompatActivity() {
             }
 
         }
-
-        binding.backButton.setOnClickListener { finish() }
-
 
     }
 
@@ -173,4 +172,9 @@ class ProgresoActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupClickListeners() {
+        findViewById<ImageView>(R.id.btnBack).setOnClickListener {
+            finish()
+        }
+    }
 }

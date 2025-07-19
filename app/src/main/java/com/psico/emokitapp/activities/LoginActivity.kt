@@ -15,9 +15,21 @@ import com.psico.emokitapp.utils.SessionManager
 class LoginActivity : AppCompatActivity() {
 
     private val usuarioViewModel: UsuarioViewModel by viewModels()
+    private lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        sessionManager = SessionManager(this)
+
+        if (sessionManager.isLoggedIn()) {
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_login)
 
         val etEmail = findViewById<TextInputEditText>(R.id.etLoginEmail)
@@ -29,25 +41,21 @@ class LoginActivity : AppCompatActivity() {
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
-            // Validar campos vacíos
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Validar formato de email
             if (!isValidEmail(email)) {
                 Toast.makeText(this, "Ingresa un email válido", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Validar longitud mínima de contraseña
             if (password.length < 6) {
                 Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Deshabilitar botón para evitar múltiples clics
             btnLogin.isEnabled = false
             btnLogin.text = "Iniciando..."
 
@@ -58,12 +66,13 @@ class LoginActivity : AppCompatActivity() {
                     btnLogin.text = "Iniciar Sesión"
 
                     if (usuario != null && usuario.contrasena == password) {
-                        // Guardar sesión
-                        val sessionManager = SessionManager(this@LoginActivity)
-                        sessionManager.saveUserSession(usuario)
+                        sessionManager.saveUserSession(usuario, rememberSession = true)
 
                         Toast.makeText(this@LoginActivity, "¡Bienvenido ${usuario.nombre}!", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
+
+                        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
                         finish()
                     } else {
                         if (usuario == null) {
@@ -83,5 +92,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun isValidEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
     }
 }

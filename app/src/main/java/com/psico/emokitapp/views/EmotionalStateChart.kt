@@ -15,7 +15,7 @@ class EmotionalStateChart @JvmOverloads constructor(
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val rect = RectF()
-    private val strokeWidth = 24f
+    private val strokeWidth = 52f
 
     // Colores para cada emoción
     private val emotionColors = mapOf(

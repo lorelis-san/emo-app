@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background_gradient">
+    android:background="#FFEEE6">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,7 +54,8 @@
                 android:layout_marginBottom="20dp"
                 android:elevation="8dp"
                 app:cardCornerRadius="20dp"
-                app:cardBackgroundColor="@android:color/white">
+                app:cardBackgroundColor="#EEE6F1"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -113,7 +114,8 @@
                 android:layout_marginBottom="20dp"
                 android:elevation="8dp"
                 app:cardCornerRadius="20dp"
-                app:cardBackgroundColor="@android:color/white">
+                app:cardBackgroundColor="#EEE6F1"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"

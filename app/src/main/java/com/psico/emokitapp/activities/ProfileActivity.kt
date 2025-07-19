@@ -55,14 +55,12 @@ class ProfileActivity : AppCompatActivity() {
                 R.id.nav_home -> {
                     if (this::class != HomeActivity::class) {
                         startActivity(Intent(this, HomeActivity::class.java))
-                        finish()
                     }
                     true
                 }
                 R.id.nav_add -> {
                     if (this::class != HomeActivity::class) {
                         startActivity(Intent(this, DiarioEmocionalActivity::class.java))
-                        finish()
                     }
                     true
                 }
