@@ -2,28 +2,22 @@ package com.psico.emokitapp.activities
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.psico.emokitapp.R
 import com.psico.emokitapp.data.EmokitDatabase
 import com.psico.emokitapp.data.entities.DiarioEmocional
+import com.psico.emokitapp.helpers.ReflexionCardHelper
+import com.psico.emokitapp.utils.SessionManager
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import java.util.*
 import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
-import com.psico.emokitapp.helpers.ReflexionCardHelper
 
 class DiarioEmocionalActivity : AppCompatActivity() {
 
@@ -32,15 +26,15 @@ class DiarioEmocionalActivity : AppCompatActivity() {
     private lateinit var layoutReflexiones: LinearLayout
     private lateinit var etDescripcion: EditText
     private lateinit var cardHelper: ReflexionCardHelper
+    private lateinit var sessionManager: SessionManager
+    private lateinit var userEmail: String
 
     private var emocionSeleccionada: String = ""
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
-    // Cachear botones de emociones
     private lateinit var emotionButtons: List<ImageView>
 
-    // Enum para mejor manejo de emociones
     private enum class Emocion(val nombre: String, val drawable: Int) {
         FELIZ("feliz", R.drawable.ic_happy),
         TRISTE("triste", R.drawable.ic_sad),
@@ -58,6 +52,15 @@ class DiarioEmocionalActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_diario_emocional)
+
+        sessionManager = SessionManager(this)
+        val user = sessionManager.getUserSession()
+        if (user == null) {
+            Toast.makeText(this, "Usuario no logueado", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+        userEmail = user.correo
 
         initializeViews()
         setupInitialState()
@@ -86,10 +89,9 @@ class DiarioEmocionalActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvFecha).text = "${dateFormat.format(ahora)} - ${timeFormat.format(ahora)}"
 
         setupEmotionButtons()
-        emotionButtons.forEach { button ->
-            button.alpha = 0.7f
-        }
+        emotionButtons.forEach { button -> button.alpha = 0.7f }
         limpiarCampos()
+
         lifecycleScope.launch {
             mostrarEntradasDelDia()
             cargarReflexionesAnteriores()
@@ -97,17 +99,12 @@ class DiarioEmocionalActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        findViewById<Button>(R.id.btnGuardar).setOnClickListener {
-            validarYGuardar()
-        }
-        findViewById<ImageView>(R.id.btnBack).setOnClickListener {
-            finish()
-        }
+        findViewById<Button>(R.id.btnGuardar).setOnClickListener { validarYGuardar() }
+        findViewById<ImageView>(R.id.btnBack).setOnClickListener { finish() }
     }
 
     private fun setupEmotionButtons() {
         val emociones = Emocion.values()
-
         emotionButtons.forEachIndexed { index, imageView ->
             val emocion = emociones[index]
             imageView.apply {
@@ -119,7 +116,6 @@ class DiarioEmocionalActivity : AppCompatActivity() {
 
     private fun validarYGuardar() {
         val descripcion = etDescripcion.text.toString().trim()
-
         when {
             emocionSeleccionada.isEmpty() -> showToast("Selecciona una emoción")
             descripcion.isEmpty() -> showToast("Escribe una descripción")
@@ -131,13 +127,7 @@ class DiarioEmocionalActivity : AppCompatActivity() {
         emocionSeleccionada = emocion
         resetButtonEffects()
 
-        imageView.animate()
-            .scaleX(1.15f)
-            .scaleY(1.15f)
-            .alpha(1.0f)
-            .translationY(-4f)
-            .setDuration(250)
-            .start()
+        imageView.animate().scaleX(1.15f).scaleY(1.15f).alpha(1.0f).translationY(-4f).setDuration(250).start()
         imageView.elevation = 8f
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -148,25 +138,20 @@ class DiarioEmocionalActivity : AppCompatActivity() {
 
     private fun resetButtonEffects() {
         emotionButtons.forEach { button ->
-            button.animate()
-                .scaleX(1.0f)
-                .scaleY(1.0f)
-                .alpha(0.7f)
-                .translationY(0f)
-                .setDuration(250)
-                .start()
+            button.animate().scaleX(1.0f).scaleY(1.0f).alpha(0.7f).translationY(0f).setDuration(250).start()
             button.elevation = 0f
         }
     }
+
     private fun limpiarCampos() {
         emocionSeleccionada = ""
         etDescripcion.setText("")
         resetButtonEffects()
     }
+
     private fun cargarReflexionesAnteriores() {
         lifecycleScope.launch {
-            val reflexiones = database.diarioEmocionalDao().getUltimasReflexiones(5)
-
+            val reflexiones = database.diarioEmocionalDao().getUltimasReflexiones(userEmail, 5)
             layoutReflexiones.visibility = if (reflexiones.isNotEmpty()) {
                 mostrarReflexiones(reflexiones)
                 View.VISIBLE
@@ -175,6 +160,7 @@ class DiarioEmocionalActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun mostrarReflexiones(reflexiones: List<DiarioEmocional>) {
         containerReflexiones.removeAllViews()
         reflexiones.forEach { reflexion ->
@@ -185,8 +171,7 @@ class DiarioEmocionalActivity : AppCompatActivity() {
     private fun mostrarEntradasDelDia() {
         lifecycleScope.launch {
             val hoy = getStartOfDay()
-            val entradasHoy = database.diarioEmocionalDao().contarEntradasPorFecha(hoy)
-
+            val entradasHoy = database.diarioEmocionalDao().contarEntradasPorFecha(userEmail, hoy)
             if (entradasHoy > 0) {
                 showToast("Ya tienes $entradasHoy reflexión(es) hoy")
             }
@@ -196,13 +181,13 @@ class DiarioEmocionalActivity : AppCompatActivity() {
     private fun guardarEntrada(descripcion: String) {
         lifecycleScope.launch {
             val nuevaEntrada = DiarioEmocional(
+                usuarioCorreo = userEmail,
                 emocion = emocionSeleccionada,
                 descripcion = descripcion,
                 fecha = getStartOfDay(),
                 timestamp = Date()
             )
             database.diarioEmocionalDao().insertEntrada(nuevaEntrada)
-
             showToast("Reflexión guardada exitosamente")
             cargarReflexionesAnteriores()
             limpiarCampos()
@@ -217,6 +202,7 @@ class DiarioEmocionalActivity : AppCompatActivity() {
             set(Calendar.MILLISECOND, 0)
         }.time
     }
+
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }

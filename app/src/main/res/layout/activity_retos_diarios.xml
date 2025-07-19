@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Header -->
         <LinearLayout
             android:id="@+id/header"
             android:layout_width="match_parent"
@@ -23,8 +22,8 @@
 
             <ImageView
                 android:id="@+id/backButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:src="@drawable/ic_arrow_back"
                 android:contentDescription="Volver"
                 android:clickable="true"
@@ -45,7 +44,6 @@
                 android:layout_marginEnd="40dp" />
         </LinearLayout>
 
-        <!-- Título -->
         <TextView
             android:id="@+id/sectionTitle"
             android:layout_width="wrap_content"
@@ -56,7 +54,6 @@
             android:textStyle="bold"
             android:layout_marginTop="16dp" />
 
-        <!-- Progreso -->
         <androidx.cardview.widget.CardView
             android:id="@+id/progressCard"
             android:layout_width="match_parent"
@@ -93,7 +90,6 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Mensaje Felicitación -->
         <TextView
             android:id="@+id/congratsMessage"
             android:layout_width="match_parent"
@@ -106,7 +102,6 @@
             android:gravity="center"
             android:visibility="gone" />
 
-        <!-- RecyclerView con altura fija -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/retosRecyclerView"
             android:layout_width="match_parent"

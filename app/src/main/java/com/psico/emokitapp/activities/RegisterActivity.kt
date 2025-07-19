@@ -37,7 +37,7 @@ class RegisterActivity : AppCompatActivity() {
             usuarioViewModel.insertar(usuario)
 
             Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show()
-            finish() // Volver al login automáticamente
+            finish()
         }
     }
 }

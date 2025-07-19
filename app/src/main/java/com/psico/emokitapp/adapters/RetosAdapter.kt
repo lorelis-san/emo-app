@@ -38,7 +38,6 @@ class RetosAdapter(
         holder.recompensaTextView.text = reto.recompensa
         holder.checkBox.isChecked = reto.completado
 
-        // Cambiar apariencia según estado
         if (reto.completado) {
             holder.cardView.setCardBackgroundColor(
                 holder.itemView.context.getColor(R.color.success_light)
@@ -61,7 +60,6 @@ class RetosAdapter(
             )
         }
 
-        // Click listeners
         holder.cardView.setOnClickListener {
             onRetoClick(reto)
         }

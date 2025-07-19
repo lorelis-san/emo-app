@@ -21,7 +21,6 @@
         android:layout_marginTop="35dp"
         android:layout_marginStart="24dp"/>
 
-    <!-- Cuatro tarjetas horizontales con más margen lateral y menos altura -->
     <LinearLayout
         android:id="@+id/linearLayoutCards"
         android:layout_width="0dp"
@@ -35,7 +34,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- CARD 1: Diario emocional -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardDiario"
             android:layout_width="0dp"
@@ -78,7 +76,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- CARD 2: Retos -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardRetos"
             android:layout_width="0dp"
@@ -121,7 +118,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- CARD 3: Meditaciones -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardMeditaciones"
             android:layout_width="0dp"
@@ -169,7 +165,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- CARD 4: Progreso -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardProgreso"
             android:layout_width="0dp"
@@ -248,13 +243,11 @@
             android:layout_height="180dp"
             android:layout_marginBottom="8dp">
 
-            <!-- Gráfico circular personalizado -->
             <com.psico.emokitapp.views.EmotionalStateChart
                 android:id="@+id/chartEstadoEmocional"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <!-- Emoji central -->
             <ImageView
                 android:id="@+id/imgEmocionPrincipal"
                 android:layout_width="100dp"
@@ -263,7 +256,6 @@
                 android:src="@drawable/ic_emotion_happy" />
         </FrameLayout>
 
-        <!-- Texto descriptivo -->
         <TextView
             android:id="@+id/tvDescripcionEstado"
             android:layout_width="wrap_content"
@@ -273,7 +265,6 @@
             android:textStyle="bold"
             android:textColor="#3D305C" />
 
-        <!-- Porcentaje de la emoción principal -->
         <TextView
             android:id="@+id/tvPorcentajeEmocional"
             android:layout_width="wrap_content"

@@ -46,7 +46,6 @@
 
         </LinearLayout>
 
-        <!-- Título -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,7 +56,6 @@
             android:gravity="center"
             android:layout_marginBottom="16dp" />
 
-        <!-- Fecha -->
         <TextView
             android:id="@+id/tvFecha"
             android:layout_width="match_parent"
@@ -68,7 +66,6 @@
             android:layout_marginBottom="20dp"
             android:text="16/07/2025 - 21:31" />
 
-        <!-- Contenedor de emociones -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -156,7 +153,6 @@
 
         </LinearLayout>
 
-        <!-- Contenedor de descripción e ilustración -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -164,7 +160,6 @@
             android:gravity="top"
             android:layout_marginBottom="32dp">
 
-            <!-- Lado izquierdo: Descripción y Botón -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -186,7 +181,6 @@
                     android:maxLines="8"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Botón Guardar -->
                 <Button
                     android:id="@+id/btnGuardar"
                     style="@style/Widget.Material3.Button"
@@ -201,7 +195,6 @@
 
             </LinearLayout>
 
-            <!-- Lado derecho: Ilustración -->
             <ImageView
                 android:id="@+id/ivIlustracion"
                 android:layout_width="130dp"
@@ -213,7 +206,6 @@
 
         </LinearLayout>
 
-        <!-- Reflexiones anteriores (simple) -->
         <LinearLayout
             android:id="@+id/layoutReflexiones"
             android:layout_width="match_parent"

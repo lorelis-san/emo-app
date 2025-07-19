@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="8dp"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="12dp"
-    card_view:cardElevation="6dp"
-    card_view:cardBackgroundColor="#F8E1E7">
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="0dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="8dp"
+    app:cardUseCompatPadding="true"
+    app:cardBackgroundColor="#D1F3F0">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/tvTituloReto"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Título del reto"
+            android:text="🏆 Título del Reto"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="#1E1B4B" />
+            android:textColor="#1E1B4B"
+
+            android:gravity="center"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_marginBottom="1dp"/>
 
         <TextView
             android:id="@+id/tvDescripcionReto"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Fecha: yyyy-MM-dd"
-            android:layout_marginTop="6dp"
-            android:textSize="14sp"
-            android:textColor="#1E1B4B" />
-
-        <TextView
-            android:id="@+id/tvRecompensaReto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="🏆 ¡Reto completado!"
-            android:layout_marginTop="6dp"
-            android:textSize="14sp"
-            android:textStyle="italic"
-            android:textColor="#1E1B4B" />
-
+            android:textSize="10sp"
+            android:textColor="#666666"
+            android:gravity="center"
+            android:layout_marginTop="1dp"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

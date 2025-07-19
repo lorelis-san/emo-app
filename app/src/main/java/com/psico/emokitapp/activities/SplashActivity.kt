@@ -13,7 +13,6 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        Toast.makeText(this, "Entró al splash", Toast.LENGTH_SHORT).show()
 
         Handler().postDelayed({
             startActivity(Intent(this, LoginActivity::class.java))
