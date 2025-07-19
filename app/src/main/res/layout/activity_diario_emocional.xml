@@ -34,10 +34,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="EMOKIT"
+                android:text="Diario Emocional"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="#6C63FF"
+                android:textColor="@color/emokit_text_primary"
                 android:gravity="center" />
 
             <View
@@ -184,14 +184,19 @@
                 <Button
                     android:id="@+id/btnGuardar"
                     style="@style/Widget.Material3.Button"
-                    android:layout_width="200dp"
-                    android:layout_height="56dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:minHeight="48dp"
+                    android:paddingVertical="12dp"
                     android:backgroundTint="#FF6B35"
                     android:text="Guardar"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_gravity="center_horizontal"
+                    android:elevation="2dp"
+                    android:stateListAnimator="@null" />
 
             </LinearLayout>
 
@@ -219,7 +224,7 @@
                 android:text="Reflexiones anteriores"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#6C63FF"
+                android:textColor="#3D305C"
                 android:layout_marginBottom="16dp" />
 
             <LinearLayout

@@ -9,160 +9,147 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Build
 import android.view.Gravity
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import java.util.Date
+import androidx.annotation.RequiresApi
 
 
 class ReflexionCardHelper(private val context: Context) {
 
-    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    private val dateFormat = SimpleDateFormat("dd MMM", Locale("es", "ES"))
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
-    private enum class Emocion(val nombre: String, val drawable: Int) {
-        FELIZ("feliz", R.drawable.ic_happy),
-        TRISTE("triste", R.drawable.ic_sad),
-        ENOJADO("enojado", R.drawable.ic_angry),
-        SORPRENDIDO("sorprendido", R.drawable.ic_surprised),
-        ANSIOSO("ansioso", R.drawable.ic_sadx2),
-        NEUTRAL("neutral", R.drawable.ic_serious);
+    private enum class EmocionInfo(
+        val nombre: String,
+        val drawable: Int,
+        val colorFondo: String,
+        val colorTexto: String
+    ) {
+        FELIZ("feliz", R.drawable.ic_happy, "#FFFBEB", "#16A34A"),
+        TRISTE("triste", R.drawable.ic_sad, "#F8FAFC", "#2563EB"),
+        ENOJADO("enojado", R.drawable.ic_angry, "#FFFBE5E5", "#DC2626"),
+        SORPRENDIDO("sorprendido", R.drawable.ic_surprised, "#FFFFF1ED", "#D97706"),
+        ANSIOSO("ansioso", R.drawable.ic_sadx2, "#F0FDF4", "#9333EA"),
+        NEUTRAL("neutral", R.drawable.ic_serious, "#FFFBEB", "#64748B");
 
         companion object {
-            fun fromNombre(nombre: String): Emocion? = values().find { it.nombre == nombre }
+            fun fromNombre(nombre: String): EmocionInfo = values().find { it.nombre == nombre } ?: NEUTRAL
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun crearCardReflexion(reflexion: DiarioEmocional): LinearLayout {
+        val emocionInfo = EmocionInfo.fromNombre(reflexion.emocion)
+
         return LinearLayout(context).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(24, 20, 24, 20)
-            background = createRoundedBackground()
-            elevation = 4f
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(dpToPx(16), dpToPx(12), dpToPx(16), dpToPx(12))
+            background = createCardBackground(emocionInfo.colorFondo)
+            elevation = 2f
+
+            isClickable = true
+            isFocusable = true
+
+            foreground = createRippleEffect()
 
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply {
-                setMargins(8, 8, 8, 16)
+                setMargins(0, 0, 0, dpToPx(8))
             }
-            addView(createCardHeader(reflexion))
-            addView(createSeparator())
-            addView(createDescriptionContent(reflexion.descripcion))
+
+            addView(createEmotionContainer(emocionInfo))
+            addView(createContentContainer(reflexion, emocionInfo))
+
+            setOnClickListener {
+                animate()
+                    .scaleX(0.95f)
+                    .scaleY(0.95f)
+                    .setDuration(100)
+                    .withEndAction {
+                        animate()
+                            .scaleX(1.0f)
+                            .scaleY(1.0f)
+                            .setDuration(100)
+                            .start()
+                    }
+                    .start()
+                val dialog = ReflexionDetailDialog(context)
+                dialog.mostrar(reflexion)
+            }
         }
     }
 
-    private fun createRoundedBackground(): GradientDrawable {
+    private fun createCardBackground(colorFondo: String): GradientDrawable {
         return GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
-            cornerRadius = 16f
-            setColor(Color.WHITE)
-            setStroke(1, Color.parseColor("#E2E8F0"))
+            cornerRadius = dpToPx(20).toFloat()
+            setColor(Color.parseColor(colorFondo))
+            setStroke(dpToPx(1), Color.parseColor("#E5E7EB"))
         }
     }
 
-    private fun createCardHeader(reflexion: DiarioEmocional): LinearLayout {
-        return LinearLayout(context).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-
-            addView(createStyledEmotionIcon(reflexion.emocion))
-            addView(createDateTimeInfo(reflexion.timestamp))
-            addView(createEmotionBadge(reflexion.emocion))
+    private fun createRippleEffect(): GradientDrawable {
+        return GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = dpToPx(20).toFloat()
+            setColor(Color.parseColor("#10000000"))
         }
     }
 
-    private fun createStyledEmotionIcon(emocion: String): LinearLayout {
+    private fun createEmotionContainer(emocionInfo: EmocionInfo): LinearLayout {
         return LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER
-            layoutParams = LinearLayout.LayoutParams(56, 56).apply {
-                setMargins(0, 0, 16, 0)
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            ).apply {
+                setMargins(0, 0, dpToPx(12), 0)
             }
-            background = GradientDrawable().apply {
-                shape = GradientDrawable.OVAL
-                setColor(getEmotionColor(emocion))
-            }
+
             addView(ImageView(context).apply {
-                val drawable = Emocion.fromNombre(emocion)?.drawable ?: R.drawable.ic_serious
-                setImageResource(drawable)
-                layoutParams = LinearLayout.LayoutParams(32, 32)
-                setColorFilter(Color.WHITE)
+                setImageResource(emocionInfo.drawable)
+                layoutParams = LinearLayout.LayoutParams(dpToPx(36), dpToPx(36))
+                scaleType = ImageView.ScaleType.FIT_CENTER
+                alpha = 0.9f
             })
         }
     }
 
-    private fun createDateTimeInfo(timestamp: Date): LinearLayout {
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun createContentContainer(reflexion: DiarioEmocional, emocionInfo: EmocionInfo): LinearLayout {
         return LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+            layoutParams = LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f
+            )
+            addView(createCompactHeader(reflexion, emocionInfo))
+            addView(createCompactDescription(reflexion.descripcion))
 
-            addView(TextView(context).apply {
-                text = dateFormat.format(timestamp)
-                textSize = 14f
-                setTextColor(Color.parseColor("#2D3748"))
-                setTypeface(null, Typeface.BOLD)
-            })
-            addView(TextView(context).apply {
-                text = timeFormat.format(timestamp)
-                textSize = 12f
-                setTextColor(Color.parseColor("#718096"))
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply { topMargin = 4 }
-            })
         }
     }
 
-    private fun createEmotionBadge(emocion: String): TextView {
-        return TextView(context).apply {
-            text = emocion.replaceFirstChar { it.uppercase() }
-            textSize = 11f
-            setTextColor(Color.WHITE)
-            setTypeface(null, Typeface.BOLD)
-            setPadding(12, 6, 12, 6)
-
-            background = GradientDrawable().apply {
-                shape = GradientDrawable.RECTANGLE
-                cornerRadius = 12f
-                setColor(getEmotionColor(emocion))
-            }
-        }
-    }
-
-    private fun createSeparator(): View {
-        return View(context).apply {
+    private fun createCompactHeader(reflexion: DiarioEmocional, emocionInfo: EmocionInfo): LinearLayout {
+        return LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                1
+                LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply {
-                setMargins(0, 16, 0, 16)
+                bottomMargin = dpToPx(6)
             }
-            setBackgroundColor(Color.parseColor("#E2E8F0"))
-        }
-    }
-
-    private fun createDescriptionContent(descripcion: String): LinearLayout {
-        return LinearLayout(context).apply {
-            orientation = LinearLayout.VERTICAL
 
             addView(TextView(context).apply {
-                text = "Reflexión"
+                text = "${dateFormat.format(reflexion.timestamp)} • ${timeFormat.format(reflexion.timestamp)}"
                 textSize = 12f
-                setTextColor(Color.parseColor("#6C63FF"))
-                setTypeface(null, Typeface.BOLD)
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply { bottomMargin = 8 }
-            })
-
-            addView(TextView(context).apply {
-                text = descripcion
-                textSize = 14f
-                setTextColor(Color.parseColor("#4A5568"))
+                setTextColor(Color.parseColor("#64748B"))
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
@@ -170,16 +157,25 @@ class ReflexionCardHelper(private val context: Context) {
             })
         }
     }
-
-    private fun getEmotionColor(emocion: String): Int {
-        return when (emocion) {
-            "feliz" -> Color.parseColor("#48BB78")
-            "triste" -> Color.parseColor("#4299E1")
-            "enojado" -> Color.parseColor("#F56565")
-            "sorprendido" -> Color.parseColor("#ED8936")
-            "ansioso" -> Color.parseColor("#9F7AEA")
-            "neutral" -> Color.parseColor("#718096")
-            else -> Color.parseColor("#6C63FF")
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun createCompactDescription(descripcion: String): TextView {
+        return TextView(context).apply {
+            text = if (descripcion.length > 80) {
+                descripcion.take(80) + "..."
+            } else {
+                descripcion
+            }
+            textSize = 13f
+            setTextColor(Color.parseColor("#374151"))
+            lineHeight = (textSize * 1.3f).toInt()
+            maxLines = 2
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
         }
+    }
+    private fun dpToPx(dp: Int): Int {
+        return (dp * context.resources.displayMetrics.density).toInt()
     }
 }

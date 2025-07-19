@@ -1,11 +1,13 @@
 package com.psico.emokitapp.activities
 
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.psico.emokitapp.R
 import com.psico.emokitapp.adapters.RetosAdapter
 import com.psico.emokitapp.data.entities.Reto
 import com.psico.emokitapp.data.entities.RetoCompletado
@@ -121,6 +123,8 @@ class RetosDiariosActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
-        binding.backButton.setOnClickListener { finish() }
+        findViewById<ImageView>(R.id.btnBack).setOnClickListener {
+            finish()
+        }
     }
 }
