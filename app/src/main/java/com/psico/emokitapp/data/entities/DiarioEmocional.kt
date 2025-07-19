@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import com.psico.emokitapp.utils.DateConverter
 import java.util.Date
 
 @Entity(tableName = "diario_emocional")
@@ -19,14 +20,3 @@ data class DiarioEmocional (
     @ColumnInfo(name = "usuario_correo")
     val usuarioCorreo: String
 )
-class DateConverter {
-    @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
-    }
-
-    @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time
-    }
-}

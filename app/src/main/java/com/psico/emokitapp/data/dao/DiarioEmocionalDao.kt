@@ -11,10 +11,6 @@ import java.util.Date
 @Dao
 interface DiarioEmocionalDao {
 
-
-    @Query("SELECT * FROM diario_emocional WHERE usuario_correo = :usuarioCorreo ORDER BY timestamp DESC")
-    suspend fun getAllEntradas(usuarioCorreo: String): List<DiarioEmocional>
-
     @Query("SELECT * FROM diario_emocional WHERE usuario_correo = :usuarioCorreo ORDER BY timestamp DESC LIMIT :limit")
     suspend fun getUltimasReflexiones(usuarioCorreo: String, limit: Int): List<DiarioEmocional>
 

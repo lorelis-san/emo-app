@@ -47,7 +47,6 @@ class ReflexionCardHelper(private val context: Context) {
             ).apply {
                 setMargins(8, 8, 8, 16)
             }
-
             addView(createCardHeader(reflexion))
             addView(createSeparator())
             addView(createDescriptionContent(reflexion.descripcion))
@@ -81,12 +80,10 @@ class ReflexionCardHelper(private val context: Context) {
             layoutParams = LinearLayout.LayoutParams(56, 56).apply {
                 setMargins(0, 0, 16, 0)
             }
-
             background = GradientDrawable().apply {
                 shape = GradientDrawable.OVAL
                 setColor(getEmotionColor(emocion))
             }
-
             addView(ImageView(context).apply {
                 val drawable = Emocion.fromNombre(emocion)?.drawable ?: R.drawable.ic_serious
                 setImageResource(drawable)
@@ -107,7 +104,6 @@ class ReflexionCardHelper(private val context: Context) {
                 setTextColor(Color.parseColor("#2D3748"))
                 setTypeface(null, Typeface.BOLD)
             })
-
             addView(TextView(context).apply {
                 text = timeFormat.format(timestamp)
                 textSize = 12f
