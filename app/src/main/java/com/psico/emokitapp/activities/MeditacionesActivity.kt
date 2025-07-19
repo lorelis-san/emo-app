@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -79,6 +80,9 @@ class MeditacionesActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
+        findViewById<ImageView>(R.id.btnBack).setOnClickListener {
+            finish()
+        }
         btnIniciar.setOnClickListener {
             if (estaEnPausa) {
                 reanudarTemporizador()
@@ -224,6 +228,9 @@ class MeditacionesActivity : AppCompatActivity() {
     }
 
     private fun mostrarMensajeCompletado() {
+        val cardMensajeCompletado = findViewById<androidx.cardview.widget.CardView>(R.id.cardMensajeCompletado)
+        cardMensajeCompletado.visibility = View.VISIBLE
+
         tvMensajeCompletado.visibility = View.VISIBLE
         tvMensajeCompletado.alpha = 0f
         tvMensajeCompletado.scaleX = 0.8f
@@ -245,7 +252,9 @@ class MeditacionesActivity : AppCompatActivity() {
     }
 
     private fun ocultarMensajeCompletado() {
-        if (tvMensajeCompletado.visibility == View.VISIBLE) {
+        val cardMensajeCompletado = findViewById<androidx.cardview.widget.CardView>(R.id.cardMensajeCompletado)
+
+        if (cardMensajeCompletado.visibility == View.VISIBLE) {
             ObjectAnimator.ofFloat(tvMensajeCompletado, "alpha", 1f, 0f).apply {
                 duration = 300
                 start()
@@ -259,7 +268,7 @@ class MeditacionesActivity : AppCompatActivity() {
                 start()
             }
             Handler(Looper.getMainLooper()).postDelayed({
-                tvMensajeCompletado.visibility = View.GONE
+                cardMensajeCompletado.visibility = View.GONE
             }, 300)
         }
     }
@@ -273,9 +282,14 @@ class MeditacionesActivity : AppCompatActivity() {
                 if (usuario != null && actividad != null) {
                     val duracionRealizada = ((tiempoTotal - tiempoRestante) / 1000).toInt()
                     repository.completarActividad(usuario.id, actividad.id, duracionRealizada)
-                    mostrarEstadisticas(usuario.id)
+
+                    val mensajeEstadisticas = obtenerMensajeEstadisticas(usuario.id)
+                    actualizarMensajeCompletado(mensajeEstadisticas)
+                } else {
+                    actualizarMensajeCompletado("¡Actividad completada exitosamente!")
                 }
             } catch (e: Exception) {
+                actualizarMensajeCompletado("¡Actividad completada exitosamente!")
                 Toast.makeText(
                     this@MeditacionesActivity,
                     "Error al guardar progreso: ${e.message}",
@@ -284,23 +298,23 @@ class MeditacionesActivity : AppCompatActivity() {
             }
         }
     }
+    private fun actualizarMensajeCompletado(mensaje: String) {
+        tvMensajeCompletado.text = mensaje
+    }
 
-    private fun mostrarEstadisticas(usuarioId: Int) {
-        lifecycleScope.launch {
-            try {
-                val actividadesHoy = repository.getActividadesHoy(usuarioId)
-                val totalActividades = repository.getHistorialActividades(usuarioId)
-                val mensaje =
-                    "¡Felicitaciones! Has completado ${actividadesHoy.size} actividades hoy y ${totalActividades.size} en total."
-                Toast.makeText(this@MeditacionesActivity, mensaje, Toast.LENGTH_LONG).show()
-            } catch (e: Exception) {}
+    private suspend fun obtenerMensajeEstadisticas(usuarioId: Int): String {
+        return try {
+            val actividadesHoy = repository.getActividadesHoy(usuarioId)
+            val totalActividades = repository.getHistorialActividades(usuarioId)
+            "¡Felicitaciones! Has completado ${actividadesHoy.size} actividades hoy."
+        } catch (e: Exception) {
+            "¡Felicitaciones! Actividad completada exitosamente."
         }
     }
 
     private fun actualizarDisplayTemporizador(millisUntilFinished: Long) {
         val minutos = (millisUntilFinished / 1000) / 60
         val segundos = (millisUntilFinished / 1000) % 60
-
         tvTemporizador.text = String.format("%02d:%02d", minutos, segundos)
     }
 

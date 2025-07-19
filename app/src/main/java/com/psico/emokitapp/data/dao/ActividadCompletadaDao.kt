@@ -15,6 +15,9 @@ interface ActividadCompletadaDao {
     @Query("SELECT * FROM actividades_completadas WHERE usuarioId = :usuarioId AND DATE(fechaCompletada) = DATE(:fecha)")
     suspend fun getActividadesDelDia(usuarioId: Int, fecha: Date): List<ActividadCompletada>
 
+    @Query("SELECT * FROM actividades_completadas WHERE usuarioId = :usuarioId AND fechaCompletada >= :inicioDelDia AND fechaCompletada <= :finDelDia ORDER BY fechaCompletada DESC")
+    suspend fun getActividadesDelDiaRango(usuarioId: Int, inicioDelDia: Date, finDelDia: Date): List<ActividadCompletada>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertActividadCompletada(actividad: ActividadCompletada)
 

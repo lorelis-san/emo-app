@@ -3,6 +3,7 @@ package com.psico.emokitapp.repository
 import com.psico.emokitapp.data.EmokitDatabase
 import com.psico.emokitapp.data.entities.ActividadCompletada
 import com.psico.emokitapp.data.entities.ActividadMeditacion
+import java.util.Calendar
 import java.util.Date
 import kotlin.random.Random
 
@@ -30,6 +31,21 @@ class MeditacionRepository (private val database: EmokitDatabase) {
     }
 
     suspend fun getActividadesHoy(usuarioId: Int): List<ActividadCompletada> {
-        return database.actividadCompletadaDao().getActividadesDelDia(usuarioId, Date())
+        val calendar = Calendar.getInstance()
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val inicioDelDia = calendar.time
+
+        // Final del día (23:59:59)
+        calendar.set(Calendar.HOUR_OF_DAY, 23)
+        calendar.set(Calendar.MINUTE, 59)
+        calendar.set(Calendar.SECOND, 59)
+        calendar.set(Calendar.MILLISECOND, 999)
+        val finDelDia = calendar.time
+
+        return database.actividadCompletadaDao().getActividadesDelDiaRango(usuarioId, inicioDelDia, finDelDia)
     }
 }

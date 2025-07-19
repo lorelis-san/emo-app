@@ -10,11 +10,11 @@ import com.psico.emokitapp.data.dao.ActividadMeditacionDao
 import com.psico.emokitapp.data.dao.DiarioEmocionalDao
 import com.psico.emokitapp.data.dao.RetoCompletadoDao
 import com.psico.emokitapp.data.dao.UsuarioDao
-import com.psico.emokitapp.data.entities.DateConverter
 import com.psico.emokitapp.data.entities.DiarioEmocional
 import com.psico.emokitapp.data.entities.RetoCompletado
 import com.psico.emokitapp.data.entities.Usuario
 import com.psico.emokitapp.data.entities.*
+import com.psico.emokitapp.utils.DateConverter
 
 @Database(
     entities = [
